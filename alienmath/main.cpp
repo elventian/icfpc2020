@@ -19,6 +19,15 @@ int main(int argc, char* argv[])
 		SymbolPage page = SymbolPage(QImage(imageFile));
 		std::cout << page << std::endl;
 	}
+	else {
+		while (true) {
+			std::cout << "Enter number to generate 2d glyph:" << std::endl;
+			int64_t value;
+			std::cin >> value;
+			Symbol symbol(value);
+			std::cout << symbol.glyphStr(true) << std::endl;
+		}
+	}
 	
 	return 0;
 }
