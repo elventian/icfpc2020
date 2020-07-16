@@ -43,15 +43,16 @@ void SymbolPage::parse()
 		int lineHeight = 0;
 		SymbolLine *line = nullptr;
 		for (int x = 0; x < m_lineWidth - 1; x++) {
-			Symbol symbol(this, x, y);
+			QRect zone(x, y, 0, 0);
+			Symbol symbol = Symbol(this, zone);
 			if (symbol.type() != Symbol::Invalid) {
 				if (!line) {
 					line = new SymbolLine();
 					m_lines << line;
 				}
 				*line << symbol;
-				x += symbol.width();
-				lineHeight = std::max(lineHeight, symbol.height());
+				x += zone.width();
+				lineHeight = std::max(lineHeight, zone.height());
 			}
 		}
 		y += lineHeight;

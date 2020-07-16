@@ -25,7 +25,8 @@ int main(int argc, char* argv[])
 			int64_t value;
 			std::cin >> value;
 			Symbol symbol(value);
-			std::cout << symbol.glyphStr(true) << std::endl;
+			std::cout << symbol.glyph().pseudographics(true) << std::endl;
+			std::cout << symbol.linear().pseudographics(true) << std::endl;
 		}
 	}
 	

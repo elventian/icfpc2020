@@ -12,7 +12,8 @@ SOURCES += \
 HEADERS += \ 
     SymbolPage.h \
     Symbol.h \
-    SymbolLine.h
+    SymbolLine.h \
+    ByteRect.h
 
 INCLUDEPATH +=
 

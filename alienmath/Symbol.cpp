@@ -14,6 +14,8 @@ void Symbol::init()
 	types[12]  = Statement;
 	types[40]  = IntDivision;
 	types[146] = Product;
+	types[170] = ToLinear;
+	types[341] = ToGlyph;
 	types[365] = Sum;
 	types[401] = Predecessor;
 	types[416] = Less;
@@ -21,93 +23,140 @@ void Symbol::init()
 	types[448] = Equality;
 }
 
-Symbol::Symbol(const SymbolPage *page, int x, int y)
+Symbol::Symbol(const SymbolPage *page, QRect &zone)
 {
-	m_width = 1;
+	int width = 1, height = 1;
+	int x = zone.left(), y = zone.top();
 	m_type = Invalid;
-	if (!(page->at(x + 1, y) && page->at(x, y + 1))) { return; }
-	do { m_width++; } while (page->at(x + m_width, y));
-	
-	m_height = m_width;
-	assert(m_width < 9);
-	
-	if (!page->at(x, y)) {
-		m_type = Int;
-		m_value = parseInt(page, x + 1, y + 1, m_width, m_height);
-		if (page->at(x, y + m_height)) {
-			m_height++;
-			m_value *= -1;
-		}
-	}
-	else {
-		m_type = Variable;
-		for (int i = 1; i < m_width; i++) {
-			if (!page->at(x + i, y + m_height - 1) ||
-				!page->at(x + m_width - 1, y + i)) {
-				m_type = Invalid;
-				break;
+	bool linearPositive = page->at(x, y + 1) && page->at(x + 1, y);
+	bool linearNegative = page->at(x, y) && page->at(x + 1, y + 1);
+	if ((linearPositive || linearNegative) && 
+	!page->at(x, y + 2) && (page->at(x + 2, y) || page->at(x + 2, y + 1))) {
+		//parse linear representation
+		int n = 0, intWidth;
+		while (page->at(x + 2 + n, y)) { n++; }
+		intWidth = n * 4;
+		int64_t value = 0;
+		for (int i = 0; i < intWidth; i++) {
+			if (page->at(x + 2 + (n + 1) + i, y)) {
+				value += 1 << (intWidth - i - 1);
 			}
 		}
-		if (m_type == Variable) {
-			m_value = parseInt(page, x + 2, y + 2, m_width - 1, m_height - 1, true);
+		if (linearNegative) { value *= -1; }
+		*this = Symbol(value);
+		height = 2;
+		width = 3 + n + intWidth;
+	}
+	else {
+		if (!(page->at(x + 1, y) && page->at(x, y + 1))) { return; }
+		do { width++; } while (page->at(x + width, y));
+		
+		height = width;
+		assert(width < 9);
+		
+		if (!page->at(x, y)) {
+			m_type = Int;
+			m_value = parseInt(page, x + 1, y + 1, width, height);
+			if (page->at(x, y + height)) {
+				height++;
+				m_value *= -1;
+			}
 		}
 		else {
-			m_value = parseInt(page, x + 1, y + 1, m_width, m_height);
-			assert(types.contains(m_value));
-			m_type = types[m_value];
+			m_type = Variable;
+			for (int i = 1; i < width; i++) {
+				if (!page->at(x + i, y + height - 1) ||
+					!page->at(x + width - 1, y + i)) {
+					m_type = Invalid;
+					break;
+				}
+			}
+			if (m_type == Variable) {
+				m_value = parseInt(page, x + 2, y + 2, width - 1, height - 1, true);
+			}
+			else {
+				m_value = parseInt(page, x + 1, y + 1, width, height);
+				assert(types.contains(m_value));
+				m_type = types[m_value];
+			}
 		}
 	}
+	zone.setSize(QSize(width, height));
 }
 
 Symbol::Symbol(int64_t value)
 {
 	m_type = Int;
 	m_value = value;
-	m_height = m_width = ceil(sqrt(log2(abs(value)) + 1)) + 1;
-	if (value < 0) { m_height++; }
 }
 
-QByteArray Symbol::glyph() const
+ByteRect Symbol::glyph() const
 {
-	QByteArray arr(m_height * m_width, false);
+	QSize size = getGlyphSize();
+	int h = size.height();
+	int w = size.width();
+	ByteRect arr(size, false);
 	if (m_type == Variable) {
 		//frame
-		for (int x = 0; x < m_width; x++)  { arr[x] = arr[x + (m_height - 1) * m_width] = true; }
-		for (int y = 1; y < m_height - 1; y++) { arr[y * m_width] = arr[(y + 1) * m_width - 1] = true; }
-		generateInt(arr, 1, 1, m_width - 2, m_height - 2, true);
+		for (int x = 0; x < w; x++)  { arr.at(x, 0) = arr.at(x, h - 1) = true; }
+		for (int y = 1; y < h - 1; y++) { arr.at(0, y) = arr.at(w - 1, y) = true; }
+		generateInt(arr, 1, 1, w - 2, h - 2, true);
 	}
 	else {
-		generateInt(arr, 0, 0, m_width, m_height);
-		if (m_type != Int) { arr[0] = true; } //top left corner
+		generateInt(arr, 0, 0, w, h);
+		if (m_type != Int) { arr.at(0, 0) = true; } //top left corner
 	}
 	return arr;
 }
 
-std::string Symbol::glyphStr(bool addOuterBorder) const
+ByteRect Symbol::linear() const
 {
-	const QByteArray &arr = glyph();
-	std::string res;
-	std::string borderSymbol = "⬛";
-	if (addOuterBorder) {
-		for (int x = 0; x < m_width + 2; x++) { res += borderSymbol; }
-		res += "\n";
-	}
-	for (int y = 0; y < m_height; y++) {
-		if (addOuterBorder) { res += borderSymbol; }
-		for (int x = 0; x < m_width; x++) {
-			 res += (arr[x + y * m_width] ? "⬜" : "⬛"); 
+	const QByteArray &larr = linearBits();
+	ByteRect res(QSize(larr.length(), 2), false);
+	for (int i = 0; i < larr.length(); i++) {
+		if (larr[i]) {
+			res.at(i, 0) = true;
 		}
-		if (addOuterBorder) { res += borderSymbol; }
-		res += "\n";
-	}
-	if (addOuterBorder) {
-		for (int x = 0; x < m_width + 2; x++) { res += borderSymbol; }
-		res += "\n";
+		else {
+			res.at(i, 1) = true;
+		}
 	}
 	return res;
 }
 
-int64_t Symbol::parseInt(const SymbolPage *page, int x, int y, int width, int height, bool inverted) const
+QByteArray Symbol::linearBits() const
+{
+	int64_t value = abs(m_value);
+	int n = 0, width = 3;
+	if (value != 0)
+	{
+		int intWidth = log2(value); //meaning integer part
+		n = (intWidth / 4 + 1);
+		width = 2 + n + 1 + n * 4;
+	}
+	QByteArray res(width, false);
+	if (m_type == Int) {
+		if (m_value >= 0) { res[1] = true;}
+		else { res[0] = true; }
+		for (int i = 0; i < n; i++) {
+			res[2 + i] = true;
+		}
+		int i = width - 1;
+		while (value > 0) {
+			if (value & 0x1) {
+				res[i] = true;
+			}
+			value = value >> 1;
+			i--;
+		}
+	}
+	else {
+		assert(m_type == Int);
+	}
+	return res;
+}
+
+int64_t Symbol::parseInt(const SymbolPage *page, int x, int y, int width, int height, bool inverted)
 {
 	int64_t value = 0;
 	int offset = 0;
@@ -120,15 +169,15 @@ int64_t Symbol::parseInt(const SymbolPage *page, int x, int y, int width, int he
 	return value;
 }
 
-void Symbol::generateInt(QByteArray &arr, int x, int y, int width, int height, bool inverted) const
+void Symbol::generateInt(ByteRect &arr, int x, int y, int width, int height, bool inverted) const
 {
-	for (int xi = 1; xi < width; xi++)  { arr[x + xi] = !inverted; } //top frame
-	for (int yi = 1; yi < height; yi++) { arr[y + yi * width] = !inverted; } //left frame
+	for (int xi = 1; xi < width; xi++)  { arr.at(x + xi, y) = !inverted; } //top frame
+	for (int yi = 1; yi < height; yi++) { arr.at(x, y + yi) = !inverted; } //left frame
 	uint64_t value = abs(m_value);
 	int xi = 1, yi = 1;
 	while (value > 0) {
 		if (value & 0x1) {
-			arr[xi + yi * width] = !inverted;
+			arr.at(x + xi, y + yi) = !inverted;
 		}
 		value = value >> 1;
 		xi++;
@@ -138,6 +187,13 @@ void Symbol::generateInt(QByteArray &arr, int x, int y, int width, int height, b
 		}
 	}
 	
+}
+
+QSize Symbol::getGlyphSize() const
+{
+	if (m_value == 0) { return QSize(2, 2); }
+	int side = ceil(sqrt(log2(abs(m_value)) + 1)) + 1;
+	return QSize(side, side + (m_value < 0));
 }
 
 std::ostream &operator<<(std::ostream &stream, const Symbol &symbol)
@@ -157,6 +213,8 @@ std::ostream &operator<<(std::ostream &stream, const Symbol &symbol)
 		case Symbol::True:        stream << "t"; break;
 		case Symbol::False:       stream << "f"; break;
 		case Symbol::Less:        stream << "<"; break;
+		case Symbol::ToLinear:    stream << "〜"; break;
+		case Symbol::ToGlyph:     stream << "#"; break;
 	}
 	return stream;
 }
