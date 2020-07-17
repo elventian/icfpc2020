@@ -13,6 +13,7 @@ public:
 	friend std::ostream &operator<<(std::ostream &stream, const SymbolPage &page);
 	
 	SymbolPage(const QByteArray &arr, int lineWidth);
+	SymbolPage(const std::string &linear);
 	SymbolPage(const QImage &image);
 	bool at(int x, int y) const { return m_arr[x + y * m_lineWidth]; }
 private:

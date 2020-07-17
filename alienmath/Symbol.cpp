@@ -9,6 +9,7 @@ QMap<int, Symbol::Type> Symbol::types;
 void Symbol::init()
 {
 	types[0]   = Apply;
+	types[1]   = Id;
 	types[2]   = True;
 	types[5]   = F20;
 	types[6]   = Flip;
@@ -16,6 +17,7 @@ void Symbol::init()
 	types[8]   = False;
 	types[10]  = Negate;
 	types[12]  = Statement;
+	types[14]  = F28;
 	types[40]  = IntDivision;
 	types[146] = Product;
 	types[170] = ToLinear;
@@ -25,6 +27,9 @@ void Symbol::init()
 	types[416] = Less;
 	types[417] = Successor;
 	types[448] = Equality;
+	types[64170] = Cons;
+	types[64171] = Cdr;
+	types[64174] = Car;
 }
 
 Symbol::Symbol(const SymbolPage *page, QRect &zone)
@@ -67,12 +72,23 @@ Symbol::Symbol(const SymbolPage *page, QRect &zone)
 			}
 		}
 		else {
-			m_type = Variable;
-			for (int i = 1; i < width; i++) {
-				if (!page->at(x + i, y + height - 1) ||
-					!page->at(x + width - 1, y + i)) {
-					m_type = Invalid;
-					break;
+			if (page->at(x + 1, y + 1) && width > 2) {
+				m_type = Variable;
+				for (int i = 1; i < width; i++) {
+					if (!page->at(x + i, y + height - 1) ||
+						!page->at(x + width - 1, y + i))
+					{
+						m_type = Invalid;
+						break;
+					}
+				}
+				for (int i = 2; i < width - 1; i++) {
+					if (page->at(x + i, y + 1) ||
+						page->at(x + 1, y + i)) 
+					{
+						m_type = Invalid;
+						break;
+					}
 				}
 			}
 			if (m_type == Variable) {
@@ -92,6 +108,23 @@ Symbol::Symbol(int64_t value)
 {
 	m_type = Int;
 	m_value = value;
+}
+
+Symbol::Symbol(const QByteArray &bits)
+{
+	//parse linear representation
+	int n = 0, intWidth;
+	while (bits[2 + n]) { n++; }
+	intWidth = n * 4;
+	int64_t value = 0;
+	for (int i = 0; i < intWidth; i++) {
+		if (bits[2 + (n + 1) + i]) {
+			value += 1 << (intWidth - i - 1);
+		}
+	}
+	bool linearNegative = bits[0] && !bits[1];
+	if (linearNegative) { value *= -1; }
+	*this = Symbol(value);
 }
 
 ByteRect Symbol::glyph() const
@@ -220,9 +253,14 @@ std::ostream &operator<<(std::ostream &stream, const Symbol &symbol)
 		case Symbol::ToLinear:    stream << "〜"; break;
 		case Symbol::ToGlyph:     stream << "#"; break;
 		case Symbol::Negate:      stream << "-"; break;
-		case Symbol::F18:         stream << "a1(a3, a2(a3))"; break;
-		case Symbol::Flip:        stream << "a1(a3, a2)"; break;
-		case Symbol::F20:         stream << "a1(a2(a3))"; break;
+		case Symbol::F18:         stream << "a(c, b(c))"; break;
+		case Symbol::Flip:        stream << "a(c, b)"; break;
+		case Symbol::F20:         stream << "a(b(c))"; break;
+		case Symbol::Id:          stream << "a"; break;
+		case Symbol::Cons:        stream << "c(a,b)"; break;
+		case Symbol::Car:         stream << "a(true)"; break;
+		case Symbol::Cdr:         stream << "a(false)"; break;
+		case Symbol::F28:         stream << "null"; break;
 	}
 	return stream;
 }

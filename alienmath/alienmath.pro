@@ -7,13 +7,15 @@ SOURCES += \
     main.cpp \
     SymbolPage.cpp \
     Symbol.cpp \
-    SymbolLine.cpp
+    SymbolLine.cpp \
+    Client.cpp
 
 HEADERS += \ 
     SymbolPage.h \
     Symbol.h \
     SymbolLine.h \
-    ByteRect.h
+    ByteRect.h \
+    Client.h
 
 INCLUDEPATH +=
 

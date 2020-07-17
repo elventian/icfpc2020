@@ -19,11 +19,12 @@ public:
 		Successor, Predecessor, Sum, Product, IntDivision,
 		ToLinear, ToGlyph,
 		Equality, Less,
-		F18, Flip, F20};
+		F18, Flip, F20, Id, Cons, Car, Cdr, F28};
 	
 	static void init();
 	
 	Symbol(int64_t value);
+	Symbol(const QByteArray &bits);
 	
 	//parse Symbol from page starting from zone top left corner; 
 	//fill zone with width and height of parsed symbol
