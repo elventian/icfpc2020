@@ -24,7 +24,7 @@ public:
 	static void init();
 	
 	Symbol(int64_t value);
-	Symbol(const QByteArray &bits);
+	Symbol(const QByteArray &bits, int &length, int offset = 0);
 	
 	//parse Symbol from page starting from zone top left corner; 
 	//fill zone with width and height of parsed symbol

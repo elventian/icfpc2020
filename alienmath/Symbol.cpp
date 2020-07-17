@@ -110,21 +110,22 @@ Symbol::Symbol(int64_t value)
 	m_value = value;
 }
 
-Symbol::Symbol(const QByteArray &bits)
+Symbol::Symbol(const QByteArray &bits, int &length, int offset)
 {
 	//parse linear representation
 	int n = 0, intWidth;
-	while (bits[2 + n]) { n++; }
+	while (bits[offset + 2 + n]) { n++; }
 	intWidth = n * 4;
 	int64_t value = 0;
 	for (int i = 0; i < intWidth; i++) {
-		if (bits[2 + (n + 1) + i]) {
+		if (bits[offset + 2 + (n + 1) + i]) {
 			value += 1 << (intWidth - i - 1);
 		}
 	}
-	bool linearNegative = bits[0] && !bits[1];
+	bool linearNegative = bits[offset + 0] && !bits[offset + 1];
 	if (linearNegative) { value *= -1; }
 	*this = Symbol(value);
+	length = 3 + n + n * 4;
 }
 
 ByteRect Symbol::glyph() const
