@@ -22,6 +22,7 @@ main = catch (
         putStrLn ("ServerUrl: " ++ args!!0 ++ "; PlayerKey: " ++ args!!1)
         
         r <- send (args!!0) (args!!1)
+        r <- send (args!!0) "1101000"
         return ()
 
     ) handler
