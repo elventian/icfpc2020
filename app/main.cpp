@@ -18,19 +18,20 @@ int main(int argc, char* argv[])
 	}
 	const std::string serverName = urlMatches[1];
 	const int serverPort = std::stoi(urlMatches[2]);
+	const std::string number = "0111000101010";
 	httplib::Client client(serverName, serverPort);
 	const std::shared_ptr<httplib::Response> serverResponse = 
-		client.Post(serverUrl.c_str(), playerKey.c_str(), "text/plain");
+		client.Post(serverUrl.c_str(), (playerKey + number).c_str(), "text/plain");
 
 	if (!serverResponse) {
 		std::cout << "Unexpected server response:\nNo response from server" << std::endl;
-		return 1;
+		return 2;
 	}
 	
 	if (serverResponse->status != 200) {
 		std::cout << "Unexpected server response:\nHTTP code: " << serverResponse->status
 		          << "\nResponse body: " << serverResponse->body << std::endl;
-		return 2;
+		return 3;
 	}
 
 	std::cout << "Server response: " << serverResponse->body << std::endl;
