@@ -23,6 +23,7 @@ main = catch (
         
         r <- send (args!!0) (args!!1)
         r <- send (args!!0) "1101000"
+        r <- send (args!!0) "010"
         return ()
 
     ) handler
