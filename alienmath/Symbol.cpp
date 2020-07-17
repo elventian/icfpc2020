@@ -10,7 +10,11 @@ void Symbol::init()
 {
 	types[0]   = Apply;
 	types[2]   = True;
+	types[5]   = F20;
+	types[6]   = Flip;
+	types[7]   = F18;
 	types[8]   = False;
+	types[10]  = Negate;
 	types[12]  = Statement;
 	types[40]  = IntDivision;
 	types[146] = Product;
@@ -210,11 +214,15 @@ std::ostream &operator<<(std::ostream &stream, const Symbol &symbol)
 		case Symbol::Product:     stream << "⨯"; break;
 		case Symbol::IntDivision: stream << "/"; break;
 		case Symbol::Equality:    stream << "=="; break;
-		case Symbol::True:        stream << "t"; break;
-		case Symbol::False:       stream << "f"; break;
+		case Symbol::True:        stream << "a1"; break;
+		case Symbol::False:       stream << "a2"; break;
 		case Symbol::Less:        stream << "<"; break;
 		case Symbol::ToLinear:    stream << "〜"; break;
 		case Symbol::ToGlyph:     stream << "#"; break;
+		case Symbol::Negate:      stream << "-"; break;
+		case Symbol::F18:         stream << "a1(a3, a2(a3))"; break;
+		case Symbol::Flip:        stream << "a1(a3, a2)"; break;
+		case Symbol::F20:         stream << "a1(a2(a3))"; break;
 	}
 	return stream;
 }

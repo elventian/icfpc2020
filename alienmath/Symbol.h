@@ -15,10 +15,11 @@ public:
 	friend std::ostream &operator<<(std::ostream &stream, const Symbol &symbol);
 	
 	enum Type {	Invalid, 
-		Int, Variable, Statement, True, False, Apply, 
+		Int, Variable, Statement, True, False, Negate, Apply, 
 		Successor, Predecessor, Sum, Product, IntDivision,
 		ToLinear, ToGlyph,
-		Equality, Less };
+		Equality, Less,
+		F18, Flip, F20};
 	
 	static void init();
 	
