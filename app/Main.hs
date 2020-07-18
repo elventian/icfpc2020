@@ -20,7 +20,7 @@ send url msg = do
         strResp = BLU.toString (getResponseBody response)
     case statuscode of
         "200" -> do putStrLn ("Server response: " ++ strResp)
-                    print $ fst$demodulate strResp
+                    -- print $ fst$demodulate strResp
         _ -> putStrLn ("Unexpected server response:\nHTTP code: " ++ statuscode ++ "\nResponse body: " ++ strResp)
     return strResp
 
