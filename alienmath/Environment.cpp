@@ -3,9 +3,8 @@
 #include "Factory.h"
 #include <stdlib.h>
 #include <QFile>
+#include <QFileInfo>
 #include <QTextStream>
-
-static const QByteArray rootName = "galaxy";
 
 Environment::Environment(const QString& filename)
 {
@@ -19,6 +18,8 @@ Environment::Environment(const QString& filename)
 		QTextStream(stderr) << "File " << filename << " could not be opened for reading." << endl;
 		exit(1);
 	}
+
+	const QByteArray rootName = QFileInfo(filename).baseName().toLatin1();
 
 	const QByteArray ba = file.readAll();
 	QList<QByteArray> lines = ba.split('\n');
@@ -50,6 +51,12 @@ Environment::Environment(const QString& filename)
 		// Create real node from line, and assign to ParsedNode.
 		dynamic_cast<const ParsedNode *>(parsedNode.get())->setNode(
 			createTreeFromTokens(valStr.split(' ')));
+	}
+
+	if (!m_root) {
+		QTextStream(stderr) << "Could not find root node \"" << rootName
+			<< "\" in file " << filename << endl;
+		exit(1);
 	}
 }
 

@@ -12,6 +12,7 @@ class Environment
 {
 public:
 	Environment(const QString &filename);
+	NodePtr getTree() const { return m_root; }
 	static Node *createNodeByType(Type type);
 
 private:
