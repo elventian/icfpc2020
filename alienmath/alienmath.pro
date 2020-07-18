@@ -13,9 +13,10 @@ SOURCES += \
     Type.cpp \
     Function.cpp \
     Environment.cpp \
-    RuntimeFunc.cpp \
     Functions.cpp \
-    Apply.cpp
+    Apply.cpp \
+    Factory.cpp \
+    ParsedNode.cpp
 
 HEADERS += \ 
     SymbolPage.h \
@@ -27,9 +28,10 @@ HEADERS += \
     Type.h \
     Function.h \
     Environment.h \
-    RuntimeFunc.h \
     Functions.h \
-    Apply.h
+    Apply.h \
+    Factory.h \
+    ParsedNode.h
 
 INCLUDEPATH +=
 

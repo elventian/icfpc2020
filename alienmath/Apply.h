@@ -14,8 +14,8 @@ public:
 
 	Apply() {}
 	ApType getAppType() const { return m_apType; }
-	void setLeft(const NodePtr &left) { m_left = left; }
-	void setRight(const NodePtr &right) { m_right = right; }
+	bool hasBothChildren() const { return (bool)m_right; }
+	void addChild(const NodePtr &child) const;
 	void determineApType() const;
 
 	virtual Type type() const override { return Type::Apply; }
@@ -23,8 +23,8 @@ public:
 	virtual NodePtr pass(const NodePtr &arg) const override;
 
 private:
-	NodePtr m_left;
-	NodePtr m_right;
+	mutable NodePtr m_left;
+	mutable NodePtr m_right;
 	mutable ApType m_apType = ApType::Any;
 };
 

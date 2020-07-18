@@ -4,6 +4,7 @@
 #include "Type.h"
 
 #include <memory>
+#include <stdint.h>
 
 class Node;
 
@@ -12,6 +13,7 @@ typedef std::shared_ptr<const Node> NodePtr;
 class Node
 {
 public:
+	virtual ~Node() {}
 	virtual Type type() const = 0;
 	virtual NodePtr eval() const = 0;
 	virtual NodePtr pass(const NodePtr &arg) const = 0;
@@ -35,7 +37,7 @@ private:
 class Int: public Node
 {
 public:
-	Int(int value): m_value(value) {}
+	Int(int64_t value): m_value(value) {}
 	virtual Type type() const override { return Type::Int; }
 	virtual NodePtr eval() const override
 	{
@@ -43,7 +45,7 @@ public:
 	}
 	virtual NodePtr pass(const NodePtr &) const override { return nullptr; }
 
-	const int m_value;
+	const int64_t m_value;
 };
 
 #endif // NODE_H

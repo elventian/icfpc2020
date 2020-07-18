@@ -1,6 +1,16 @@
 #include "Apply.h"
 #include <assert.h>
 
+void Apply::addChild(const NodePtr &child) const
+{
+	if (!m_left) {
+		m_left = child;
+		return;
+	}
+	assert(!m_right);
+	m_right = child;
+}
+
 void Apply::determineApType() const
 {
 	assert(m_left != nullptr);
