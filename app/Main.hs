@@ -20,9 +20,18 @@ send url msg = do
         strResp = BLU.toString (getResponseBody response)
     case statuscode of
         "200" -> do putStrLn ("Server response: " ++ strResp)
-                    -- print $ fst$demodulate strResp
+                    print $ fst$demodulate strResp
         _ -> putStrLn ("Unexpected server response:\nHTTP code: " ++ statuscode ++ "\nResponse body: " ++ strResp)
-    return strResp
+    return $ fst$demodulate strResp
+
+
+loop r url key  = do
+    let st = evalBlock' $ BApp (BName "car") $ BApp (BName "cdr") r
+    if st == BNum 2
+    then return ()
+    else do let BMod mes = evalBlock' $  BApp (BName "mod") $ BList [BNum 4, BNum key, BNil]
+            r1 <- send url mes
+            loop r1 url key
 
 main = catch (
     do  
@@ -33,6 +42,10 @@ main = catch (
         r <- send (args!!0 ++ "/aliens/send") mes
         let BMod mes1 = evalBlock' $  BApp (BName "mod") $ BList [BNum 3, BNum (read$args!!1), BList[BNum 1, BNum 1, BNum 1, BNum 1]]
         r <- send (args!!0 ++ "/aliens/send") mes1
+        
+        loop r (args!!0 ++ "/aliens/send")  (read$args!!1)
+        
+        
         return ()
 
     ) handler
