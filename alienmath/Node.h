@@ -13,12 +13,11 @@ class Node
 {
 public:
 	virtual Type type() const = 0;
-	virtual NodePtr calculate() const = 0;
+	virtual NodePtr eval() const = 0;
+	virtual NodePtr pass(const NodePtr &arg) const = 0;
 
 protected:
 	Node() {}
-
-	NodePtr thisAsNodePtr() const { return NodePtr(this); }
 };
 
 class Nil: Node
@@ -26,7 +25,11 @@ class Nil: Node
 public:
 	Nil() {}
 	virtual Type type() const override { return Type::Nil; }
-	virtual NodePtr calculate() const override { return thisAsNodePtr(); }
+	virtual NodePtr eval() const override { return sharedNil; }
+	virtual NodePtr pass(const NodePtr &) const override { return nullptr; }
+
+private:
+	static const NodePtr sharedNil;
 };
 
 class Int: Node
@@ -34,7 +37,11 @@ class Int: Node
 public:
 	Int(int value): m_value(value) {}
 	virtual Type type() const override { return Type::Int; }
-	virtual NodePtr calculate() const override {return thisAsNodePtr(); }
+	virtual NodePtr eval() const override
+	{
+		return NodePtr(static_cast<const Node *>(new Int(m_value)));
+	}
+	virtual NodePtr pass(const NodePtr &) const override { return nullptr; }
 
 const int m_value;
 };

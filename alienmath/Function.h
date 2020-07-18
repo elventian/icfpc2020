@@ -4,25 +4,32 @@
 #include "Node.h"
 
 #include <vector>
+#include <assert.h>
 
-typedef std::vector<NodePtr *> Args;
+typedef std::vector<NodePtr> Args;
 
 class Function: public Node
 {
 public:
 	virtual unsigned maxArgs() const = 0;
 
-	virtual NodePtr calculate() const override
+	virtual NodePtr eval() const override
 	{
-		if (m_args.size() != maxArgs()) { return thisAsNodePtr(); }
-		// TODO: Call calculate() recursively for all arguments.
-		return calcFull();
+		assert(false);
+		return nullptr;
+		//if (m_args.size() != maxArgs()) { return thisAsNodePtr(); }
+		// TODO: Call eval() recursively for all arguments.
+		return evalFull();
 	}
+
+	virtual NodePtr pass(const NodePtr &arg) const override;
 
 protected:
 	Function(const Args &args): m_args(args) {}
+	bool hasEnoughArgs() const { return m_args.size() != maxArgs(); }
 
-	virtual NodePtr calcFull() const = 0;
+	virtual Function *clone(const Args &args) const = 0;
+	virtual NodePtr evalFull() const = 0;
 
 	const Args m_args;
 };

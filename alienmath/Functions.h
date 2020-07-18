@@ -11,7 +11,7 @@ public:
 	virtual unsigned maxArgs() const override { return 2; }
 
 protected:
-	virtual NodePtr calcFull() const override { return thisAsNodePtr(); } // TODO: Implement
+	//virtual NodePtr evalFull() const override { return thisAsNodePtr(); } // TODO: Implement
 };
 
 #endif // FUNCTIONS_H

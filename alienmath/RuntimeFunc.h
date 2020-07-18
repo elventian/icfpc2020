@@ -15,7 +15,7 @@ public:
 
 protected:
 	virtual unsigned maxArgs() const override { return m_node->maxArgs(); }
-	virtual NodePtr calcFull() const override { return m_node->calculate(); }
+	virtual NodePtr evalFull() const override { return m_node->eval(); }
 
 private:
 	Id m_id;

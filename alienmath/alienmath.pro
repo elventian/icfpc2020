@@ -14,7 +14,8 @@ SOURCES += \
     Function.cpp \
     Environment.cpp \
     RuntimeFunc.cpp \
-    Functions.cpp
+    Functions.cpp \
+    Apply.cpp
 
 HEADERS += \ 
     SymbolPage.h \
@@ -27,7 +28,8 @@ HEADERS += \
     Function.h \
     Environment.h \
     RuntimeFunc.h \
-    Functions.h
+    Functions.h \
+    Apply.h
 
 INCLUDEPATH +=
 
