@@ -2,9 +2,13 @@
 #define INTERACTION_H
 
 #include "Functions.h"
+#include <QString>
 
-DEF_FUNC_CLASS(Interact,    3)
-DEF_FUNC_CLASS(F38,         2)
-DEF_FUNC_CLASS(Draw,        1)
+
+class Interaction
+{
+public:
+	Interaction(const QString &protocolFile);
+};
 
 #endif // INTERACTION_H

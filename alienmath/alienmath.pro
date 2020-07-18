@@ -20,7 +20,8 @@ SOURCES += \
     Apply.cpp \
     Factory.cpp \
     ParsedNode.cpp \
-    Interaction.cpp
+    Interaction.cpp \
+    List.cpp
 
 HEADERS += \ 
     SymbolPage.h \
@@ -36,7 +37,8 @@ HEADERS += \
     Apply.h \
     Factory.h \
     ParsedNode.h \
-    Interaction.h
+    Interaction.h \
+    List.h
 
 INCLUDEPATH +=
 

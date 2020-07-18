@@ -5,7 +5,7 @@
 #include "SymbolPage.h"
 #include "Symbol.h"
 #include "Client.h"
-#include "Environment.h"
+#include "Interaction.h"
 
 int main(int argc, char* argv[]) 
 {
@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
 	Symbol::init();
 	if (parser.isSet(gui)) {
 		QString protocolFile = parser.value(gui);
-		Environment env(protocolFile);
+		Interaction interaction(protocolFile);
 		//return app.exec();
 	}
 	else if (parser.isSet(parseImageOpt)) {

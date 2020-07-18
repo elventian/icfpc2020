@@ -3,7 +3,7 @@
 
 #include "Function.h"
 
-#define INT(node)  dynamic_cast<const Int *>(node.get())->m_value
+#define INT(node)  dynamic_cast<const Int *>((node).get())->m_value
 #define NODE(child) NodePtr(static_cast<const Node *>(child))
 
 #define DEF_FUNC_CLASS(_name, _maxArgs) \

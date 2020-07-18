@@ -20,7 +20,7 @@ public:
 protected:
 	Function() {}
 	Function(const Args &args): m_args(args) {}
-	bool hasEnoughArgs() const { return m_args.size() != maxArgs(); }
+	bool hasEnoughArgs() const { return m_args.size() == maxArgs(); }
 
 	virtual Function *clone(const Args &args) const = 0;
 
