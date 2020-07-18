@@ -15,6 +15,7 @@ class Node
 public:
 	virtual ~Node() {}
 	virtual Type type() const = 0;
+	virtual Type typeForParsing() const { return type(); }
 	virtual NodePtr eval() const = 0;
 	virtual NodePtr pass(const NodePtr &arg) const = 0;
 

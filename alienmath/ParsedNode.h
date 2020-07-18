@@ -12,6 +12,7 @@ public:
 	void setNode(const NodePtr &node) const { m_node = node; }
 
 	virtual Type type() const override { return m_node->type(); }
+	virtual Type typeForParsing() const override { return Type::ParsedNode; }
 	virtual NodePtr eval() const override { return m_node->eval(); }
 	virtual NodePtr pass(const NodePtr &arg) const override { return m_node->pass(arg); }
 

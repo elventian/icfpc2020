@@ -23,9 +23,11 @@ Environment::Environment(const QString& filename)
 	const QByteArray ba = file.readAll();
 	QList<QByteArray> lines = ba.split('\n');
 
+	int i = 1;
 	// Create nodes of type ParsedNode for every line.
 	for (const QByteArray &line: lines) {
-		QTextStream(stdout) << line << endl;
+		if (line.trimmed().isEmpty()) { continue; }
+		QTextStream(stdout) << "LINE " << i++ << ": " << line << endl;
 		const QList<QByteArray> assignmentSides = line.split('=');
 		const QByteArray idStr = assignmentSides[0].trimmed();
 		const QByteArray valStr = assignmentSides[1].trimmed();
@@ -57,7 +59,7 @@ NodePtr Environment::createTreeFromTokens(const QList<QByteArray> &tokens)
 	m_applyStack.clear();
 
 	for (const QByteArray &token: tokens) {
-		QTextStream(stdout) << token << endl;
+		//QTextStream(stdout) << token << endl;
 		if (token.startsWith(':')) {
 			const ParsedNode::Id id = parseFuncId(token);
 			addNode(getOrCreateParsedNode(id));
@@ -101,7 +103,7 @@ void Environment::addNode(const NodePtr &newNode)
 {
 	if (!m_curRoot) { m_curRoot = newNode; }
 
-	if (newNode->type() != Type::Apply && m_applyStack.isEmpty()) { return; }
+	if (newNode->typeForParsing() != Type::Apply && m_applyStack.isEmpty()) { return; }
 
 	if (!m_applyStack.isEmpty()) {
 		m_applyStack.top()->addChild(newNode);
@@ -110,7 +112,7 @@ void Environment::addNode(const NodePtr &newNode)
 		}
 	}
 
-	if (newNode->type() == Type::Apply) {
+	if (newNode->typeForParsing() == Type::Apply) {
 		m_applyStack.push(dynamic_cast<const Apply *>(newNode.get()));
 	}
 }

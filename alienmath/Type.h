@@ -55,6 +55,7 @@ enum class Type
 	Apply,
 	Variable,
 	Statement, // PropositionalEquality
+	ParsedNode,
 };
 
 #endif // TYPE_H

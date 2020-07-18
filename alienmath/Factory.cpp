@@ -12,7 +12,7 @@ const QMap<QByteArray, Type> Factory::stringToType = {
 	{ "eq", Type::Equality },
 	{ "t", Type::True },
 	{ "f", Type::False },
-	{ "g", Type::Less },
+	{ "lt", Type::Less },
 	{ "mod", Type::Modulate },
 	{ "dem", Type::Demodulate },
 	{ "send", Type::Send },
@@ -39,6 +39,7 @@ Node *Factory::createNodeByType(Type type)
 {
 	switch (type) {
 		case Type::Nil: { return new Nil(); }
+		case Type::Sum: { return new Sum(); }
 		case Type::Product: { return new Product(); }
 		case Type::IntDivision: { return new IntDivision(); }
 		case Type::Equality: { return new Equality(); }
