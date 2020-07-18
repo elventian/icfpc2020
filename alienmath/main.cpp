@@ -25,8 +25,7 @@ int main(int argc, char* argv[])
 		std::cout << page << std::endl;
 	}
 	else if (parser.isSet(connectAliens)) {
-		Client client("https://icfpc2020-api.testkontur.ru/scoreboard/lightning:80", 
-			"b4c1d7d8042e46c7a5e59574839f41b9");
+		Client client;
 	}
 	else if (parser.isSet(fromBinary)) {
 		std::string value = parser.value(fromBinary).toStdString();
