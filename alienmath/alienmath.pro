@@ -8,14 +8,26 @@ SOURCES += \
     SymbolPage.cpp \
     Symbol.cpp \
     SymbolLine.cpp \
-    Client.cpp
+    Client.cpp \
+    Node.cpp \
+    Type.cpp \
+    Function.cpp \
+    Environment.cpp \
+    RuntimeFunc.cpp \
+    Functions.cpp
 
 HEADERS += \ 
     SymbolPage.h \
     Symbol.h \
     SymbolLine.h \
     ByteRect.h \
-    Client.h
+    Client.h \
+    Node.h \
+    Type.h \
+    Function.h \
+    Environment.h \
+    RuntimeFunc.h \
+    Functions.h
 
 INCLUDEPATH +=
 
