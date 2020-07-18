@@ -30,9 +30,9 @@ main = catch (
         putStrLn ("ServerUrl: " ++ args!!0 ++ "; PlayerKey: " ++ args!!1)
         let BMod mes = evalBlock' $  BApp (BName "mod") $ BList [BNum 2, BNum (read$args!!1), BNil]
         --r <- send (args!!0) (args!!1)
-        r <- send (args!!0) mes
-        let BMod mes1 = evalBlock' $  BApp (BName "mod") $ BList [BNum 2, BNum (read$args!!1), BList[BNum 1, BNum 1, BNum 1, BNum 1]]
-        r <- send (args!!0) mes1
+        r <- send (args!!0 ++ "/aliens/send") mes
+        let BMod mes1 = evalBlock' $  BApp (BName "mod") $ BList [BNum 3, BNum (read$args!!1), BList[BNum 1, BNum 1, BNum 1, BNum 1]]
+        r <- send (args!!0 ++ "/aliens/send") mes1
         return ()
 
     ) handler
