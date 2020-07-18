@@ -42,11 +42,6 @@ Environment::Environment(const QString& filename)
 		const ParsedNode::Id id = parseFuncId(idStr);
 
 		// If ParsedNode with the id was not created by referencing yet, then create it now.
-		NodeMap::iterator iter = m_parsedNodes.find(id);
-		if (iter == m_parsedNodes.end()) {
-			iter = m_parsedNodes.insert(id, NodePtr(new ParsedNode(id)));
-		}
-
 		const NodePtr &parsedNode = getOrCreateParsedNode(id);
 
 		// Create real node from line, and assign to ParsedNode.
