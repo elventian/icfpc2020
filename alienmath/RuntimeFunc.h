@@ -8,14 +8,14 @@ class RuntimeFunc : public Function
 public:
 	typedef int Id;
 
-	RuntimeFunc(Id id): Function(Args()), m_id(id) {}
+	RuntimeFunc(Id id): m_id(id) {}
 	void setNode(const Function *node) { m_node = node; }
 
 	virtual Type type() const override { return m_node->type(); }
 
 protected:
 	virtual unsigned maxArgs() const override { return m_node->maxArgs(); }
-	virtual NodePtr evalFull() const override { return m_node->eval(); }
+	virtual NodePtr evalFull() const override { return m_node->evalFull(); }
 
 private:
 	Id m_id;

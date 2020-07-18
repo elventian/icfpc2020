@@ -12,24 +12,16 @@ class Function: public Node
 {
 public:
 	virtual unsigned maxArgs() const = 0;
+	virtual NodePtr evalFull() const = 0;
 
-	virtual NodePtr eval() const override
-	{
-		assert(false);
-		return nullptr;
-		//if (m_args.size() != maxArgs()) { return thisAsNodePtr(); }
-		// TODO: Call eval() recursively for all arguments.
-		return evalFull();
-	}
-
+	virtual NodePtr eval() const override { assert(false); return nullptr; }
 	virtual NodePtr pass(const NodePtr &arg) const override;
 
 protected:
-	Function(const Args &args): m_args(args) {}
+	Function() {}
 	bool hasEnoughArgs() const { return m_args.size() != maxArgs(); }
 
 	virtual Function *clone(const Args &args) const = 0;
-	virtual NodePtr evalFull() const = 0;
 
 	const Args m_args;
 };

@@ -6,7 +6,14 @@
 class Apply: public Node
 {
 public:
+	enum class ApType {
+		Any,
+		HalfPair,
+		Pair,
+	};
+
 	Apply() {}
+	ApType getAppType() const { return m_apType; }
 	void setLeft(const NodePtr &left) { m_left = left; }
 	void setRight(const NodePtr &right) { m_right = right; }
 	void determineApType() const;
@@ -16,13 +23,6 @@ public:
 	virtual NodePtr pass(const NodePtr &arg) const override;
 
 private:
-	enum class ApType {
-		Any,
-		//Func,
-		HalfPair,
-		Pair,
-	};
-
 	NodePtr m_left;
 	NodePtr m_right;
 	mutable ApType m_apType = ApType::Any;

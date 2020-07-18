@@ -20,7 +20,7 @@ protected:
 	Node() {}
 };
 
-class Nil: Node
+class Nil: public Node
 {
 public:
 	Nil() {}
@@ -32,7 +32,7 @@ private:
 	static const NodePtr sharedNil;
 };
 
-class Int: Node
+class Int: public Node
 {
 public:
 	Int(int value): m_value(value) {}
@@ -43,7 +43,7 @@ public:
 	}
 	virtual NodePtr pass(const NodePtr &) const override { return nullptr; }
 
-const int m_value;
+	const int m_value;
 };
 
 #endif // NODE_H

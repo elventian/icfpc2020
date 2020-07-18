@@ -30,5 +30,9 @@ NodePtr Apply::eval() const
 
 NodePtr Apply::pass(const NodePtr &arg) const
 {
-	// TODO: Implement.
+	assert(m_left != nullptr);
+	assert(m_right != nullptr);
+
+	NodePtr newNode = m_left->pass(m_right);
+	return newNode->pass(arg);
 }
