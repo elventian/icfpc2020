@@ -3,6 +3,9 @@
 
 #include "Function.h"
 
+#define INT(node)  dynamic_cast<const Int *>(node.get())->m_value
+#define NODE(child) NodePtr(static_cast<const Node *>(child))
+
 #define DEF_FUNC_CLASS(_name, _maxArgs) \
 class _name: public Function \
 { \
@@ -32,6 +35,7 @@ DEF_FUNC_CLASS(Cons,        3)
 DEF_FUNC_CLASS(Car,         1)
 DEF_FUNC_CLASS(Cdr,         1)
 DEF_FUNC_CLASS(IsNil,       1)
+DEF_FUNC_CLASS(Is0,         3)
 
 
 #endif // FUNCTIONS_H

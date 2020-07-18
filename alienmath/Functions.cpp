@@ -1,8 +1,5 @@
 #include "Functions.h"
 
-#define INT(node)  dynamic_cast<const Int *>(node.get())->m_value
-#define NODE(child) NodePtr(static_cast<const Node *>(child))
-
 NodePtr Sum::evalFull() const
 {
 	NodePtr x0 = m_args[0]->eval();
@@ -144,5 +141,17 @@ NodePtr IsNil::evalFull() const
 	}
 	else {
 		return NODE(new False());
+	}
+}
+
+NodePtr Is0::evalFull() const
+{
+	NodePtr x0 = m_args[0]->eval();
+	assert(x0->type() == Type::Int);
+	if (INT(x0) == 0) {
+		return m_args[1];
+	}
+	else {
+		return m_args[2];
 	}
 }

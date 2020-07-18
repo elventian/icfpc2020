@@ -25,7 +25,7 @@ private:
 	NodeMap m_parsedNodes;
 	NodePtr m_root;
 
-	const NodePtr *m_curRoot = nullptr;
+	NodePtr m_curRoot;
 	QStack<const Apply *> m_applyStack;
 };
 

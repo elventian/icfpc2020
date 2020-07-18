@@ -36,6 +36,7 @@ enum class Type
 	MultipleDraw, // #34, multipledraw, ng
 	Send0, // #36, send ( 0 ), ng
 	Is0, // #37, if0, ng
+	F38, // #38, f38, ng
 	Interact, // #38 #39, interact, ng
 	StatelessDraw, // #40, statelessdraw, ng
 	StatefulDraw, // #41, :67108929, ng

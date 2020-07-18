@@ -1,31 +1,40 @@
 #include <iostream>
 #include <gmpxx.h>
 #include <QCommandLineParser>
+#include <QApplication>
 #include "SymbolPage.h"
 #include "Symbol.h"
 #include "Client.h"
+#include "Environment.h"
 
 int main(int argc, char* argv[]) 
 {
-	QCoreApplication app(argc, argv);
+	QApplication app(argc, argv);
 	QCommandLineParser parser;
 	QCommandLineOption parseImageOpt("parse-image", "Parse math from image", "path");
 	QCommandLineOption fromBinary("from-bin", "Convert binary into int or list<int>", "b_str");
 	QCommandLineOption connectAliens("aliens", "Send something to aliens");
+	QCommandLineOption gui("run", "Run alien protocol", "file");
 	parser.addHelpOption();
 	parser.addOption(parseImageOpt);
 	parser.addOption(fromBinary);
 	parser.addOption(connectAliens);
+	parser.addOption(gui);
 	parser.process(app);
 	
 	Symbol::init();
-	if (parser.isSet(parseImageOpt)) {
+	if (parser.isSet(gui)) {
+		QString protocolFile = parser.value(gui);
+		Environment env(protocolFile);
+		//return app.exec();
+	}
+	else if (parser.isSet(parseImageOpt)) {
 		QString imageFile = parser.value(parseImageOpt);
 		SymbolPage page = SymbolPage(QImage(imageFile));
 		std::cout << page << std::endl;
 	}
 	else if (parser.isSet(connectAliens)) {
-		Client client;
+		//Client client;
 	}
 	else if (parser.isSet(fromBinary)) {
 		std::string value = parser.value(fromBinary).toStdString();

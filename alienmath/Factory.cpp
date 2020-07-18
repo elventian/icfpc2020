@@ -1,5 +1,6 @@
 #include "Factory.h"
 #include "Functions.h"
+#include "Apply.h"
 
 const QMap<QByteArray, Type> Factory::stringToType = {
 	{ "nil", Type::Nil },
@@ -52,6 +53,7 @@ Node *Factory::createNodeByType(Type type)
 		case Type::Car: { return new Car(); }
 		case Type::Cdr: { return new Cdr(); }
 		case Type::IsNil: { return new IsNil(); }
+		case Type::Apply: { return new Apply(); }
 
 		default: return nullptr;
 	}
