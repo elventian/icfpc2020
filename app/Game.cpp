@@ -30,8 +30,7 @@ void Game::run()
 	CommandList commands;
 	//commands.push_back(new Accelerate(1, DiscrCoord2(1, 1)));
 	//commands2.push_back(new Accelerate(1, DiscrCoord2(-1, -1)));
-	//commands.push_back(new Shoot(0, DiscrCoord2(50, 50), 0));
-	commands.push_back(new UnknownCommand(0, 0));
+	commands.push_back(new Shoot(0, DiscrCoord2(0, 0), 1));
 	for (int i = 0; i < maxTurns; i++) {
 		sendCommands(commands);
 	}
