@@ -1,4 +1,4 @@
 #!/bin/sh
 
 cd build
-./main "$@" || echo "run error code: $?"
+./qt_hello_world "$@" || echo "run error code: $?"
