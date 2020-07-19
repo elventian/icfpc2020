@@ -25,3 +25,11 @@ GameState::GameState(const ConsTree &response)
 		std::cout << "New ship from game state at " << ship->position << std::endl;
 	}
 }
+
+Vector2 GameState::getVectorToHover() const
+{
+	Vector2 mycoord = Vector2(1,1); //TODO
+	Vector2 thrust = mycoord.normalize() * Vector2(-1, -1);
+	if (abs(mycoord.x()) > abs(mycoord.y())) { return Vector2(thrust.x(), 0); }
+	return Vector2(0, thrust.y());
+}

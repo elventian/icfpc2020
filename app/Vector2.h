@@ -10,6 +10,7 @@ class Vector2: public DiscrCoord2
 {
 public:
 	Vector2() {}
+	Vector2(const DiscrCoord2 &coord): DiscrCoord2(coord) {}
 	Vector2(int64_t x, int64_t y): DiscrCoord2(x, y) {}
 	Vector2(const ConsList *list);
 };

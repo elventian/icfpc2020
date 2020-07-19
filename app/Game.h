@@ -3,11 +3,15 @@
 
 #include <iostream>
 #include <list>
-#include "httplib.h"
-#include "DiscrCoord2.h"
+#include "Vector2.h"
 
 class GameState;
 class CommandList;
+class Accelerate;
+class Shoot;
+namespace httplib {
+	class Client;
+}
 
 class Game
 {
@@ -18,7 +22,7 @@ public:
 	static int64_t intFromLinear(const std::string &linear);
 	static int64_t nextIntFromLinear(const char *str, int &i);
 	static std::string intToLinear(int64_t value);
-	static std::string vectorToLinear(const DiscrCoord2 &coord);
+	static std::string vectorToLinear(const Vector2 &coord);
 	static std::string listToLinear(const std::list<int64_t> &list = std::list<int64_t>(),
 		const std::string &data = "");
 private:
@@ -28,6 +32,8 @@ private:
 	const std::string m_playerKey;
 	GameState *state;
 	const int maxTurns = 256;
+	Accelerate *accelerate;
+	Shoot *shoot;
 	
 	std::string join() const;
 	std::string start() const;

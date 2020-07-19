@@ -5,6 +5,7 @@
 
 #include "ConsTree.h"
 #include "ShipState.h"
+#include "Vector2.h"
 
 class GameState
 {
@@ -16,6 +17,7 @@ public:
 	};
 
 	GameState(const ConsTree &response);
+	Vector2 getVectorToHover() const;
 
 	bool requestWasSuccess;
 	Stage stage;

@@ -5,6 +5,7 @@
 #include "ConsTree.h"
 #include <math.h>
 #include <regex>
+#include "httplib.h"
 
 Game::Game(const std::string &serverUrl, const std::string &playerKey, bool offlineMode): 
 	m_offlineMode(offlineMode),
@@ -29,11 +30,15 @@ void Game::run()
 	const std::string joinResponseLin = join();
 	std::cout << ConsTree(joinResponseLin).root()->printable() << std::endl;
 	start();
-	CommandList commands;
-	//commands.push_back(new Accelerate(1, DiscrCoord2(1, 1)));
-	//commands2.push_back(new Accelerate(1, DiscrCoord2(-1, -1)));
-	commands.push_back(new Shoot(1, DiscrCoord2(0, 0), 5));
+	accelerate = new Accelerate(1); //TODO ship id
+	shoot = new Shoot(1); //TODO ship id
 	for (int i = 0; i < maxTurns; i++) {
+		CommandList commands;
+		Vector2 thrust = state->getVectorToHover();
+		accelerate->setCoord(thrust);
+		shoot->setTarget(Vector2(0,0)); //TODO
+		shoot->setWeapon(5);
+		commands.push_back(accelerate);
 		sendCommands(commands);
 	}
 }
@@ -108,7 +113,7 @@ std::string Game::intToLinear(int64_t value)
 	return std::string(res);
 }
 
-std::string Game::vectorToLinear(const DiscrCoord2 &coord)
+std::string Game::vectorToLinear(const Vector2 &coord)
 {
 	return "11" + intToLinear(coord.x()) + intToLinear(coord.y());
 }
