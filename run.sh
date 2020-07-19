@@ -2,7 +2,7 @@
 
 cd app
 ls -lah
-LD_LIBRARY_PATH=`pwd`
+export LD_LIBRARY_PATH=`pwd`
 echo "path:"
 echo $LD_LIBRARY_PATH
 cd ../build
