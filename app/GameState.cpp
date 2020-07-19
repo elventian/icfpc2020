@@ -21,15 +21,29 @@ GameState::GameState(const ConsTree &response)
 		ShipState *ship = new ShipState(node->asList());
 		ShipStatePtr shipPtr(ship);
 		ships[ship->id] = shipPtr;
-
-		std::cout << "New ship from game state at " << ship->position << std::endl;
 	}
 }
 
 Vector2 GameState::getVectorToHover() const
 {
-	Vector2 mycoord = Vector2(1,1); //TODO
+	Vector2 mycoord = getMyShip()->position;
 	Vector2 thrust = mycoord.normalize() * Vector2(-1, -1);
 	if (abs(mycoord.x()) > abs(mycoord.y())) { return Vector2(thrust.x(), 0); }
 	return Vector2(0, thrust.y());
+}
+
+int GameState::getMyShipId() const
+{
+	for (auto shipPair: ships) {
+		ShipStatePtr &ship = shipPair.second;
+		if (ship->role == role) {
+			return ship->id;
+		}
+	}
+	return 0;
+}
+
+const ShipStatePtr &GameState::getMyShip() const
+{
+	return ships.at(getMyShipId());
 }

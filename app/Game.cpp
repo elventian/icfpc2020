@@ -29,17 +29,18 @@ void Game::run()
 {
 	const std::string joinResponseLin = join();
 	std::cout << ConsTree(joinResponseLin).root()->printable() << std::endl;
-	start();
-	accelerate = new Accelerate(1); //TODO ship id
-	shoot = new Shoot(1); //TODO ship id
+	GameState state = GameState(ConsTree(start()));
+	accelerate = new Accelerate(state.getMyShipId());
+	shoot = new Shoot(state.getMyShipId());
 	for (int i = 0; i < maxTurns; i++) {
 		CommandList commands;
-		Vector2 thrust = state->getVectorToHover();
+		Vector2 thrust = state.getVectorToHover();
 		accelerate->setCoord(thrust);
 		shoot->setTarget(Vector2(0,0)); //TODO
 		shoot->setWeapon(5);
 		commands.push_back(accelerate);
-		sendCommands(commands);
+		const std::string &response = sendCommands(commands);
+		state = GameState(ConsTree(response));
 	}
 }
 

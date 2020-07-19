@@ -30,7 +30,6 @@ private:
 	httplib::Client *m_client;
 	const std::string m_postUrl;
 	const std::string m_playerKey;
-	GameState *state;
 	const int maxTurns = 256;
 	Accelerate *accelerate;
 	Shoot *shoot;

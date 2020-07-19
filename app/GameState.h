@@ -18,6 +18,8 @@ public:
 
 	GameState(const ConsTree &response);
 	Vector2 getVectorToHover() const;
+	int getMyShipId() const;
+	const ShipStatePtr &getMyShip() const;
 
 	bool requestWasSuccess;
 	Stage stage;
