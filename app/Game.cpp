@@ -27,12 +27,12 @@ void Game::run()
 {
 	join();
 	start();
-	CommandList commands1, commands2;
-	commands1.push_back(new Accelerate(1, DiscrCoord2(1, 1)));
-	commands2.push_back(new Accelerate(1, DiscrCoord2(-1, -1)));
+	CommandList commands;
+	//commands.push_back(new Accelerate(1, DiscrCoord2(1, 1)));
+	//commands2.push_back(new Accelerate(1, DiscrCoord2(-1, -1)));
+	commands.push_back(new Shoot(0, DiscrCoord2(50, 50), 0));
 	for (int i = 0; i < maxTurns; i++) {
-		if (i % 2 == 0) { sendCommands(commands1); }
-		else { sendCommands(commands2); }
+		sendCommands(commands);
 	}
 }
 
