@@ -2,9 +2,9 @@
 #define CONSLIST_H
 
 #include "ConsNode.h"
-#include <list>
+#include <vector>
 
-class ConsList: public ConsNode, public std::list<ConsNodePtr>
+class ConsList: public ConsNode, public std::vector<ConsNodePtr>
 {
 public:
 	ConsList(const std::string &linear, const char **linPtrPtr = nullptr);

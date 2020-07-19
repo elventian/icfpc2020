@@ -1,52 +1,27 @@
+#include <iostream>
+
 #include "GameState.h"
 #include "Game.h"
 
-GameState::GameState()
+GameState::GameState(const ConsTree &response)
 {
-	
-}
+	const ConsList &list = *response.root()->asList();
 
-void GameState::update(const std::string &newState)
-{
-	std::cout << newState << std::endl;
-	const char *str = newState.c_str();
-	//bool delimiter = true;
-	//bool listEnd = false;
-	
-	if (newState == "1101000") {
-		std::cout << "BAD STATE" << std::endl;
-		return;
+	requestWasSuccess = list[0]->intVal();
+	stage = (Stage)list[1]->intVal();
+
+	const ConsList &staticGameInfo = *list[2]->asList();
+	role = (ShipState::Role)staticGameInfo[1]->intVal();
+
+	const ConsList &gameState = *list[3]->asList();
+	gameTick = gameState[0]->intVal();
+
+	const ConsList &shipList = *gameState[2]->asList();
+	for (const ConsNodePtr &node: shipList) {
+		ShipState *ship = new ShipState(node->asList());
+		ShipStatePtr shipPtr(ship);
+		ships[ship->id] = shipPtr;
+
+		std::cout << "New ship from game state at " << ship->position << std::endl;
 	}
-	
-	for (unsigned i = 0; i < newState.length(); i++) {
-		if (str[i] == '1' && str[i + 1] == '1') {
-			/*if (delimiter) { std::cout << " [ "; }
-			else {std::cout << ", "; }*/
-			std::cout << "|";
-			//delimiter = true;
-			i += 1;
-			continue;
-		}
-		else if (str[i] == '0' && str[i + 1] == '0') {
-			//listEnd = true;
-			std::cout << "*";
-			i += 1;
-			continue;
-		}
-		//delimiter = false;
-		//listEnd = false;
-		int length = 0;
-		int64_t value = Game::intFromLinear(str + i, length);
-		std::cout << value << '.';
-		//std::cout << std::endl << str + i + length << std::endl;
-		i += length - 1;
-	}
-	
-	
-	/*int i = 0;
-	do {
-		std::cout << Game::nextIntFromLinear(str, i) << std::endl;
-	} while (i);
-	
-	std::cout << std::endl;*/
 }
