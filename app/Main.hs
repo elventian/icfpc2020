@@ -25,11 +25,18 @@ send url msg = do
     return $ fst$demodulate strResp
 
 
+findShId r (BPart "cons_2" [h,t]) = if role==r then shid else findShId r t 
+    where role = BApp (BName "car") $ BApp (BName "car") h
+          shid = BApp (BName "car") $ BApp (BName "cdr") $ BApp (BName "car") h
+
 loop r url key  = do
-    let st = evalBlock' $ BApp (BName "car") $ BApp (BName "cdr") r
-    if st == BNum 2
+    let stage = evalBlock' $ BApp (BName "car") $ BApp (BName "cdr") r
+    let role = evalBlock' $ BApp (BName "car") $ BApp (BName "cdr") $BApp (BName "car") $ BApp (BName "cdr") $ BApp (BName "cdr") r
+    let shipsnadcommands = evalBlock' $ BApp (BName "car") $ BApp (BName "cdr") $ BApp (BName "cdr") $BApp (BName "car") $ BApp (BName "cdr") $ BApp (BName "cdr") $ BApp (BName "cdr") r
+    let shid = findShId role shipsnadcommands
+    if stage == BNum 2
     then return ()
-    else do let BMod mes = evalBlock' $  BApp (BName "mod") $ BList [BNum 4, BNum key, BNil]
+    else do let BMod mes = evalBlock' $  BApp (BName "mod") $ BList [BNum 4, BNum key, BList[BList[BNum 0, shid, (BPart "cons_2" [BNum 1,BNum 0])]]]
             r1 <- send url mes
             loop r1 url key
 
