@@ -86,6 +86,8 @@ prettyDemodulate :: PrettyState -> String ->  String
 prettyDemodulate _ "" = ""
 prettyDemodulate ExNum ('0':'1':s) = let (v,r) = demodulate' s in show v ++ prettyDemodulate ExBr r
 prettyDemodulate ExNum ('1':'0':s) = let (v,r) = demodulate' s in show (-v) ++ prettyDemodulate ExBr r
+prettyDemodulate ExBr ('0':'1':s) = let (v,r) = demodulate' s in ", " ++ show v ++ prettyDemodulate ExBr r
+prettyDemodulate ExBr ('1':'0':s) = let (v,r) = demodulate' s in ", " ++ show (-v) ++ prettyDemodulate ExBr r
 prettyDemodulate ExNum ('0':'0':s) = "nil" ++ prettyDemodulate ExBr s
 prettyDemodulate ExNum ('1':'1':s) = "(" ++ prettyDemodulate ExNum s
 prettyDemodulate ExBr ('0':'0':s) = " )" ++ prettyDemodulate ExBr s
