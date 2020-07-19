@@ -21,7 +21,8 @@ SOURCES += \
     Factory.cpp \
     ParsedNode.cpp \
     Interaction.cpp \
-    List.cpp
+    List.cpp \
+    Game.cpp
 
 HEADERS += \ 
     SymbolPage.h \
@@ -38,7 +39,8 @@ HEADERS += \
     Factory.h \
     ParsedNode.h \
     Interaction.h \
-    List.h
+    List.h \
+    Game.h
 
 INCLUDEPATH +=
 

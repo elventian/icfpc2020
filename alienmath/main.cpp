@@ -6,6 +6,7 @@
 #include "Symbol.h"
 #include "Client.h"
 #include "Interaction.h"
+#include "Game.h"
 
 int main(int argc, char* argv[]) 
 {
@@ -37,32 +38,9 @@ int main(int argc, char* argv[])
 		//Client client;
 	}
 	else if (parser.isSet(fromBinary)) {
+		Game game;
 		std::string value = parser.value(fromBinary).toStdString();
-		std::cout << "Parse " << value << std::endl;
-		QByteArray bits = QByteArray::fromStdString(value);
-		for (int i = 0; i < bits.length(); i++) {
-			bits[i] = (bits[i] == '0' ? 0: 1);
-		}
-		for (int i = 0; i < bits.length(); i++) {
-			if (bits[i] && bits[i + 1]) {
-				std::cout << "List: " << std::endl;
-				i += 1;
-				continue;
-			}
-			else if (!bits[i] && !bits[i + 1]) {
-				std::cout << "nil" << std::endl;
-				i += 1;
-				continue;
-			}
-			int length = 0;
-			Symbol symbol(bits, length, i);
-			std::cout << symbol.value() << " width: " << length << " i: " << i << " end of list: ";
-			for (int j = length; j < bits.length(); j++) {
-				std::cout << (bits[j] ? "1" : "0");
-			}
-			std:: cout << std::endl;
-			i += length - 1;
-		}
+		game.parseState(value);
 	}
 	else {
 		while (true) {
