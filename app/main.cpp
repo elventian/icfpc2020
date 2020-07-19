@@ -4,12 +4,13 @@
 
 int main(int argc, char* argv[])
 {
-	(void) argc;
+	bool offline = (argc == 4);
 	const std::string serverUrl(argv[1]);
 	const std::string playerKey(argv[2]);
 
 	std::cout << "ServerUrl: " << serverUrl << "; PlayerKey: " << playerKey << std::endl;
-	Game game(serverUrl, playerKey);
+	Game game(serverUrl, playerKey, offline);
+	game.run();
 	
 	return 0;
 }

@@ -1,10 +1,6 @@
-TEMPLATE = app
-CONFIG += console c++11
+CONFIG +=  c++11
 CONFIG -= app_bundle
-CONFIG += qt
-QT += core
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT -= gui core
 
 SOURCES += \ 
     main.cpp \
