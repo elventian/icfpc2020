@@ -36,7 +36,7 @@ std::string Shoot::toLinear() const
 	//(2, shipId, target, x3)
 	std::list<int64_t> list;
 	list.push_back(2);
-	list.push_back(m_shipId);
+	//list.push_back(m_shipId);
 	
 	return Game::listToLinear(list, Game::vectorToLinear(m_target) + 
 		"11" + Game::intToLinear(m_x1) +

@@ -157,6 +157,9 @@ std::string Game::sendCommands(const CommandList &cmdList) const
 	list.push_back(4);
 	list.push_back(std::stol(m_playerKey));
 	const std::string &cmd = listToLinear(list, cmdList.toLinear());
+	
+	std::cout << ConsTree(cmd).root()->printable() << std::endl;
+	exit(0);
 	return sendRequest(cmd);
 }
 
