@@ -1,12 +1,17 @@
 #include <iostream>
 #include <regex>
 #include <string>
+#include <QString>
+#include <QVariant>
 #include "httplib.h"
 
 int main(int argc, char* argv[])
 {
 	const std::string serverUrl(argv[1]);
 	const std::string playerKey(argv[2]);
+	
+	const QVariant serverUrlVar = QVariant(QString(argv[1]));
+	const QString serverUrlQStr = serverUrlVar.toString();
 
 	std::cout << "ServerUrl: " << serverUrl << "; PlayerKey: " << playerKey << std::endl;
 	
