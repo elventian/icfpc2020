@@ -159,7 +159,6 @@ std::string Game::sendCommands(const CommandList &cmdList) const
 	const std::string &cmd = listToLinear(list, cmdList.toLinear());
 	
 	std::cout << ConsTree(cmd).root()->printable() << std::endl;
-	exit(0);
 	return sendRequest(cmd);
 }
 
