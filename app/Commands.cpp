@@ -44,7 +44,7 @@ std::string Shoot::toLinear() const
 	x3.push_back(m_x3);
 	
 	return Game::listToLinear(list, Game::vectorToLinear(m_target) + 
-		"11" + Game::listToLinear(x3));
+		"11" + Game::intToLinear(m_x1) + "11" + Game::intToLinear(m_x2) + "11" + Game::intToLinear(m_x3));
 }
 
 std::string UnknownCommand::toLinear() const
