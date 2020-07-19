@@ -32,7 +32,7 @@ void Game::run()
 	CommandList commands;
 	//commands.push_back(new Accelerate(1, DiscrCoord2(1, 1)));
 	//commands2.push_back(new Accelerate(1, DiscrCoord2(-1, -1)));
-	commands.push_back(new Shoot(1, DiscrCoord2(0, 0), 3, 0, 4));
+	commands.push_back(new Shoot(1, DiscrCoord2(0, 0), 25));
 	for (int i = 0; i < maxTurns; i++) {
 		sendCommands(commands);
 	}
@@ -142,7 +142,8 @@ std::string Game::start() const
 	list.push_back(3);
 	list.push_back(std::stol(m_playerKey));
 	std::list<int64_t> undefVars;
-	int x0 = 254, x1 = 3, x2 = 3, x3 = 1; 
+	//int x0 = 254, x1 = 3, x2 = 3, x3 = 1; 
+	int x0 = 270, x1 = 30, x2 = 10, x3 = 1; 
 	undefVars.push_back(x0);
 	undefVars.push_back(x1);
 	undefVars.push_back(x2);

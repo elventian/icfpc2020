@@ -33,14 +33,12 @@ private:
 class Shoot: public Command
 {
 public:
-	Shoot(int shipId, DiscrCoord2 target, int x1, int x2, int x3): 
-		m_shipId(shipId), m_target(target), m_x1(x1), m_x2(x2), m_x3(x3){}
+	Shoot(int shipId, DiscrCoord2 target, int x3): 
+		m_shipId(shipId), m_target(target), m_x3(x3){}
 	std::string toLinear() const override;
 private:
 	int m_shipId;
 	DiscrCoord2 m_target;
-	int m_x1;
-	int m_x2;
 	int m_x3;
 };
 
