@@ -40,3 +40,13 @@ std::string Shoot::toLinear() const
 	
 	return Game::listToLinear(list, Game::vectorToLinear(m_target) + "11" + Game::intToLinear(m_x3));
 }
+
+std::string UnknownCommand::toLinear() const
+{
+	//(3, shipId, x1)
+	std::list<int64_t> list;
+	list.push_back(3);
+	list.push_back(m_shipId);
+	
+	return Game::listToLinear(list);
+}

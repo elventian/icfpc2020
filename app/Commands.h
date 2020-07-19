@@ -41,6 +41,16 @@ private:
 	int m_x3;
 };
 
+class UnknownCommand: public Command
+{
+public:
+	UnknownCommand(int shipId, int x1): m_shipId(shipId), m_x1(x1){}
+	std::string toLinear() const override;
+private:
+	int m_shipId;
+	int m_x1;
+};
+
 
 class CommandList: public std::list<Command *>
 {
