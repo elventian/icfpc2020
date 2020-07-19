@@ -28,6 +28,7 @@ send url msg = do
 findShId r (BPart "cons_2" [h,t]) = if role==r then shid else findShId r t 
     where role = BApp (BName "car") $ BApp (BName "car") h
           shid = BApp (BName "car") $ BApp (BName "cdr") $ BApp (BName "car") h
+findShId r s = error $ show s
 
 loop r url key  = do
     let stage = evalBlock' $ BApp (BName "car") $ BApp (BName "cdr") r
