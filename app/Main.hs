@@ -20,7 +20,7 @@ send url msg = do
         strResp = BLU.toString (getResponseBody response)
     case statuscode of
         "200" -> do putStrLn ("Server response: " ++ strResp)
-                    print $ fst$demodulate strResp
+                    putStrLn $ prettyDemodulate ExNum strResp
         _ -> putStrLn ("Unexpected server response:\nHTTP code: " ++ statuscode ++ "\nResponse body: " ++ strResp)
     return $ fst$demodulate strResp
 
@@ -79,6 +79,19 @@ demodulate ('1':'1':s) = let (v1,r1) = demodulate s
 
                          in (BPart "cons_2" [v1, v2], r2)
     
+    
+
+data PrettyState = ExBr| ExComma | ExNum deriving (Eq, Read, Show)
+prettyDemodulate :: PrettyState -> String ->  String
+prettyDemodulate _ "" = ""
+prettyDemodulate ExNum ('0':'1':s) = let (v,r) = demodulate' s in show v ++ prettyDemodulate ExBr r
+prettyDemodulate ExNum ('1':'0':s) = let (v,r) = demodulate' s in show (-v) ++ prettyDemodulate ExBr r
+prettyDemodulate ExNum ('0':'0':s) = "nil" ++ prettyDemodulate ExBr s
+prettyDemodulate ExNum ('1':'1':s) = "(" ++ prettyDemodulate ExNum s
+prettyDemodulate ExBr ('0':'0':s) = " )" ++ prettyDemodulate ExBr s
+prettyDemodulate ExBr ('1':'1':s) = ", " ++ prettyDemodulate ExNum s
+
+        
         
 data Block = BNum Int | BName String | BApp Block Block | BPart String [Block] | BNil | BMod String | BList [Block] | BPicture [(Int,Int)] deriving (Eq, Read, Show)
 
@@ -95,7 +108,7 @@ readBlock (x:rest) | (isDigit $ head x )|| head x=='-' = (BNum (read x), rest)
 
 evalBlock :: IntMap Block -> Block -> Block
 evalBlock _ (BList []) = BNil
-evalBlock im (BName n) = if head n == ':' && (read$tail n) /= 1141 then evalBlock im $ im IntMap.! (read$ traceShow n $tail n) else (BName n)
+evalBlock im (BName n) = if head n == ':' then evalBlock im $ im IntMap.! (read$ traceShow n $tail n) else (BName n)
 evalBlock im (BList (x:xs)) = evalBlock im $ BApp (BApp (BName "cons") x) (evalBlock im $ BList xs)
 evalBlock im (BApp f arg) = let vf = evalBlock im f
                                 BNum varg = evalBlock im arg
