@@ -1,15 +1,6 @@
 #include "Commands.h"
 #include "Game.h"
 
-std::string Accelerate::toLinear() const
-{
-	//(0, shipId, vector)
-	std::list<int64_t> list;
-	list.push_back(0);
-	list.push_back(m_shipId);
-	return Game::listToLinear(list, Game::vectorToLinear(m_x, m_y));
-}
-
 std::string CommandList::toLinear() const
 {
 	std::string res;
@@ -19,4 +10,18 @@ std::string CommandList::toLinear() const
 	}
 	res += "00";
 	return res;
+}
+
+std::string Accelerate::toLinear() const
+{
+	//(0, shipId, vector)
+	std::list<int64_t> list;
+	list.push_back(0);
+	list.push_back(m_shipId);
+	return Game::listToLinear(list, Game::vectorToLinear(m_x, m_y));
+}
+
+std::string Detonate::toLinear() const
+{
+	
 }

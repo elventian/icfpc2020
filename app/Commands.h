@@ -21,6 +21,15 @@ private:
 	int m_y;
 };
 
+class Detonate: public Command
+{
+public:
+	Detonate(int shipId): m_shipId(shipId) {}
+	std::string toLinear() const override;
+private:
+	int m_shipId;
+};
+
 class CommandList: public std::list<Command *>
 {
 public:
