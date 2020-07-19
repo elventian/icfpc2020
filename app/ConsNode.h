@@ -24,7 +24,7 @@ public:
 	bool isList() const { return type() == Type::List; }
 	bool isVector2() const { return type() == Type::Vector2; }
 	int64_t intVal() const; // Returns 0 if this is not ConsInt.
-	ConsList *asList(); // Return nullptr if this is not List nor Vector2
+	ConsList *asList(); // Returns nullptr if this is not List nor Vector2
 
 protected:
 

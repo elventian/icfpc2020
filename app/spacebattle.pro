@@ -11,7 +11,9 @@ SOURCES += \
     ConsNode.cpp \
     ConsTree.cpp \
     ConsInt.cpp \
-    ConsList.cpp
+    ConsList.cpp \
+    Vector2.cpp \
+    ShipState.cpp
 
 HEADERS += \ 
     Game.h \
@@ -21,7 +23,9 @@ HEADERS += \
     ConsNode.h \
     ConsTree.h \
     ConsInt.h \
-    ConsList.h
+    ConsList.h \
+    Vector2.h \
+    ShipState.h
 
 INCLUDEPATH +=
 

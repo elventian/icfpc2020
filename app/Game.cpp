@@ -21,7 +21,7 @@ Game::Game(const std::string &serverUrl, const std::string &playerKey, bool offl
 		const int serverPort = std::stoi(urlMatches[2]);
 		m_client = new httplib::Client(serverName, serverPort);
 	}
-	state = new GameState();
+	//state = new GameState();
 }
 
 void Game::run()

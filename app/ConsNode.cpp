@@ -2,10 +2,15 @@
 #include "ConsInt.h"
 #include "ConsList.h"
 
+#include <assert.h>
+
 int64_t ConsNode::intVal() const
 {
 	const ConsInt *consInt = dynamic_cast<const ConsInt *>(this);
-	if (!consInt) { return 0; }
+	if (!consInt) {
+		assert(0);
+		return 0;
+	}
 	return consInt->value();
 }
 
