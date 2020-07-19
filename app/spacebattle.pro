@@ -5,11 +5,13 @@ QT -= gui core
 SOURCES += \ 
     main.cpp \
     Game.cpp \
-    GameState.cpp
+    GameState.cpp \
+    Commands.cpp
 
 HEADERS += \ 
     Game.h \
-    GameState.h
+    GameState.h \
+    Commands.h
 
 INCLUDEPATH +=
 
