@@ -45,7 +45,7 @@ loop r url key  = do
     if stage == BNum 2
     then return ()
     else do let BMod mes = evalBlock' $  BApp (BName "mod") $ BList [BNum 4, BNum key, BList[BList[BNum 0, shid, (BPart "cons_2" [BNum (if abs x > abs y then (-x `div` (abs x)) else 0),BNum (if abs y > abs x then (-y `div` (abs y)) else 0)])],
-                                                                                             BList [BNum 2, shid, BPart "cons_2" [BNum (ex+evx), BNum (ey+evy)] , BNum 5]
+                                                                                             BList [BNum 2, shid, BPart "cons_2" [BNum (ex+evx), BNum (ey+evy)] , BNum 30]
                                                                                             ]]
             r1 <- send url mes
             loop r1 url key
