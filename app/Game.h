@@ -4,6 +4,7 @@
 #include <iostream>
 #include <list>
 #include "httplib.h"
+#include "DiscrCoord2.h"
 
 class GameState;
 class CommandList;
@@ -16,7 +17,7 @@ public:
 	static int64_t intFromLinear(const char *str, int &length);
 	static int64_t nextIntFromLinear(const char *str, int &i);
 	static std::string intToLinear(int64_t value);
-	static std::string vectorToLinear(int64_t x1, int64_t x2);
+	static std::string vectorToLinear(const DiscrCoord2 &coord);
 	static std::string listToLinear(const std::list<int64_t> &list = std::list<int64_t>(),
 		const std::string &data = "");
 private:

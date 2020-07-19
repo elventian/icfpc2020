@@ -28,8 +28,8 @@ void Game::run()
 	join();
 	start();
 	CommandList commands1, commands2;
-	commands1.push_back(new Accelerate(1, 1, 1));
-	commands2.push_back(new Accelerate(1, -1, -1));
+	commands1.push_back(new Accelerate(1, DiscrCoord2(1, 1)));
+	commands2.push_back(new Accelerate(1, DiscrCoord2(-1, -1)));
 	for (int i = 0; i < maxTurns; i++) {
 		if (i % 2 == 0) { sendCommands(commands1); }
 		else { sendCommands(commands2); }
@@ -100,9 +100,9 @@ std::string Game::intToLinear(int64_t value)
 	return std::string(res);
 }
 
-std::string Game::vectorToLinear(int64_t x1, int64_t x2)
+std::string Game::vectorToLinear(const DiscrCoord2 &coord)
 {
-	return "11" + intToLinear(x1) + intToLinear(x2);
+	return "11" + intToLinear(coord.x()) + intToLinear(coord.y());
 }
 
 std::string Game::listToLinear(const std::list<int64_t> &list, const std::string &data)

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <list>
+#include <DiscrCoord2.h>
 
 class Command
 {
@@ -13,12 +14,11 @@ public:
 class Accelerate: public Command
 {
 public:
-	Accelerate(int shipId, int x, int y): m_shipId(shipId), m_x(x), m_y(y){}
+	Accelerate(int shipId, DiscrCoord2 coord): m_shipId(shipId), m_coord(coord) {}
 	std::string toLinear() const override;
 private:
 	int m_shipId;
-	int m_x;
-	int m_y;
+	DiscrCoord2 m_coord;
 };
 
 class Detonate: public Command
@@ -29,6 +29,18 @@ public:
 private:
 	int m_shipId;
 };
+
+class Shoot: public Command
+{
+public:
+	Shoot(int shipId, DiscrCoord2 target, int x3): m_shipId(shipId), m_target(target), m_x3(x3){}
+	std::string toLinear() const override;
+private:
+	int m_shipId;
+	DiscrCoord2 m_target;
+	int m_x3;
+};
+
 
 class CommandList: public std::list<Command *>
 {

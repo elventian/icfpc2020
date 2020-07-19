@@ -6,12 +6,14 @@ SOURCES += \
     main.cpp \
     Game.cpp \
     GameState.cpp \
-    Commands.cpp
+    Commands.cpp \
+    DiscrCoord2.cpp
 
 HEADERS += \ 
     Game.h \
     GameState.h \
-    Commands.h
+    Commands.h \
+    DiscrCoord2.h
 
 INCLUDEPATH +=
 
