@@ -21,6 +21,8 @@ GameState::GameState(const ConsTree &response)
 		ShipState *ship = new ShipState(node->asList());
 		ShipStatePtr shipPtr(ship);
 		ships[ship->id] = shipPtr;
+		
+		std::cout << "new ship " << ship->id << " at " << ship->position << std::endl;
 	}
 }
 
