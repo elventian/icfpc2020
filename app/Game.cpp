@@ -45,6 +45,12 @@ int64_t Game::intFromLinear(const char *str, int &length)
 	return value;
 }
 
+int64_t Game::intFromLinear(const std::string &linear)
+{
+	int length;
+	return intFromLinear(linear.c_str(), length);
+}
+
 int64_t Game::nextIntFromLinear(const char *str, int &i)
 {
 	while (str[i] != '\0') {

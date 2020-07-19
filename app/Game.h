@@ -13,6 +13,7 @@ public:
 	Game(const std::string &serverUrl, const std::string &playerKey, bool offlineMode);
 	void run();
 	static int64_t intFromLinear(const char *str, int &length);
+	static int64_t intFromLinear(const std::string &linear);
 	static int64_t nextIntFromLinear(const char *str, int &i);
 	static std::string intToLinear(int64_t value);
 	static std::string listToLinear(const std::list<int64_t> &list = std::list<int64_t>(),
