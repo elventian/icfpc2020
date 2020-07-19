@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "GameState.h"
 #include <math.h>
 #include <regex>
 
@@ -16,8 +17,8 @@ Game::Game(const std::string &serverUrl, const std::string &playerKey, bool offl
 		const std::string serverName = urlMatches[1];
 		const int serverPort = std::stoi(urlMatches[2]);
 		m_client = new httplib::Client(serverName, serverPort);
-		sendRequest(playerKey.c_str());
 	}
+	state = new GameState();
 }
 
 void Game::run()
@@ -26,7 +27,7 @@ void Game::run()
 	start();
 }
 
-int64_t Game::intFromLinear(const char *str, int &length) const
+int64_t Game::intFromLinear(const char *str, int &length)
 {
 	//parse linear representation
 	int n = 0, intWidth;
@@ -44,7 +45,24 @@ int64_t Game::intFromLinear(const char *str, int &length) const
 	return value;
 }
 
-std::string Game::intToLinear(int64_t value) const
+int64_t Game::nextIntFromLinear(const char *str, int &i)
+{
+	while (str[i] != '\0') {
+		if ((str[i] == '1' && str[i + 1] == '1') || (str[i] == '0' && str[i + 1] == '0')) {
+			i += 2;
+		}
+		else {
+			int length = 0;
+			int64_t value = Game::intFromLinear(str + i, length);
+			i += length;
+			return value;
+		}
+	}
+	i = 0;
+	return 0;
+}
+
+std::string Game::intToLinear(int64_t value)
 {
 	uint64_t uvalue = abs(value);
 	int n = 0, width = 3;
@@ -73,7 +91,7 @@ std::string Game::intToLinear(int64_t value) const
 	return std::string(res);
 }
 
-std::string Game::listToLinear(const std::list<int64_t> &list, const std::string &data) const
+std::string Game::listToLinear(const std::list<int64_t> &list, const std::string &data)
 {
 	std::string linearList;
 	for (int64_t value: list) {
@@ -91,8 +109,8 @@ void Game::join() const
 	list.push_back(2);
 	list.push_back(std::stol(m_playerKey));
 	const std::string &joinCmd = listToLinear(list, listToLinear());
-	std::cout << joinCmd << std::endl;
-	sendRequest(joinCmd);
+	std::cout << "Send command: " << joinCmd << std::endl;
+	state->update(sendRequest(joinCmd));
 }
 
 void Game::start() const
@@ -108,7 +126,7 @@ void Game::start() const
 	undefVars.push_back(x2);
 	undefVars.push_back(x3);
 	const std::string &cmd = listToLinear(list, listToLinear(undefVars));
-	std::cout << cmd << std::endl;
+	std::cout << "Send command: " << cmd << std::endl;
 	sendRequest(cmd);
 }
 
@@ -140,34 +158,4 @@ std::string Game::sendRequest(const std::string &req) const
 		return serverResponse->body;
 	}
 }
-
-void Game::parseState(const std::string &state)
-{
-	/*const char *str = state.c_str();
-	bool delimiter = false;
-	bool listEnd = false;
-	for (unsigned i = 0; i < state.length(); i++) {
-		if (str[i] == '1' && str[i + 1] == '1') {
-			if (delimiter) { std::cout << " [ "; }
-			else {std::cout << ", "; }
-			delimiter = true;
-			i += 1;
-			continue;
-		}
-		else if (str[i] == '0' && str[i + 1] == '0') {
-			listEnd = true;
-			std::cout << " ] ";
-			i += 1;
-			continue;
-		}
-		delimiter = false;
-		listEnd = false;
-		int length = 0;
-		int64_t value = intFromLinear(str + i, length);
-		std::cout << value;
-		std::cout << std::endl << str + i + length << std::endl;
-		i += length - 1;
-	}*/
-}
-
 
