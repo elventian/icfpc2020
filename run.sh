@@ -1,4 +1,4 @@
 #!/bin/sh
 
 cd build
-./main "$@" || echo "run error code: $?"
+./spacebattle "$@" || echo "run error code: $?"

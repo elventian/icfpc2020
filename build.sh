@@ -2,4 +2,7 @@
 
 cd app
 mkdir ../build
-g++ -std=c++11 -o ../build/main main.cpp
+cd ../build
+qmake ../app/spacebattle.pro
+make
+
