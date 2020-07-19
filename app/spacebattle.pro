@@ -6,6 +6,8 @@ SOURCES += \
     main.cpp \
     Game.cpp \
     GameState.cpp \
+    Commands.cpp \
+    DiscrCoord2.cpp \
     ConsNode.cpp \
     ConsTree.cpp \
     ConsInt.cpp \
@@ -14,6 +16,8 @@ SOURCES += \
 HEADERS += \ 
     Game.h \
     GameState.h \
+    Commands.h \
+    DiscrCoord2.h \
     ConsNode.h \
     ConsTree.h \
     ConsInt.h \
