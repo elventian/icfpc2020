@@ -1,7 +1,8 @@
 #ifndef CONSTREE_H
 #define CONSTREE_H
 
-#include "ConsNode.h"
+#include "ConsList.h"
+#include "ConsInt.h"
 
 class ConsTree
 {

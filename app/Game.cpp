@@ -2,6 +2,7 @@
 #include "Commands.h"
 #include "GameState.h"
 #include "Commands.h"
+#include "ConsTree.h"
 #include <math.h>
 #include <regex>
 
@@ -25,7 +26,8 @@ Game::Game(const std::string &serverUrl, const std::string &playerKey, bool offl
 
 void Game::run()
 {
-	join();
+	const std::string joinResponseLin = join();
+	std::cout << ConsTree(joinResponseLin).root()->printable() << std::endl;
 	start();
 	CommandList commands;
 	//commands.push_back(new Accelerate(1, DiscrCoord2(1, 1)));
@@ -122,18 +124,18 @@ std::string Game::listToLinear(const std::list<int64_t> &list, const std::string
 	return linearList;
 }
 
-void Game::join() const
+std::string Game::join() const
 {
 	//(2, playerKey, (...unknown list...))
 	std::list<int64_t> list;
 	list.push_back(2);
 	list.push_back(std::stol(m_playerKey));
 	const std::string &joinCmd = listToLinear(list, listToLinear());
-	sendRequest(joinCmd);
+	return sendRequest(joinCmd);
 	//state->update();
 }
 
-void Game::start() const
+std::string Game::start() const
 {
 	//(3, playerKey, (x0, x1, x2, x3))
 	std::list<int64_t> list;
@@ -146,16 +148,16 @@ void Game::start() const
 	undefVars.push_back(x2);
 	undefVars.push_back(x3);
 	const std::string &cmd = listToLinear(list, listToLinear(undefVars));
-	sendRequest(cmd);
+	return sendRequest(cmd);
 }
 
-void Game::sendCommands(const CommandList &cmdList) const
+std::string Game::sendCommands(const CommandList &cmdList) const
 {
 	std::list<int64_t> list;
 	list.push_back(4);
 	list.push_back(std::stol(m_playerKey));
 	const std::string &cmd = listToLinear(list, cmdList.toLinear());
-	sendRequest(cmd);
+	return sendRequest(cmd);
 }
 
 std::string Game::sendRequest(const std::string &req) const

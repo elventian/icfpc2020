@@ -1,6 +1,4 @@
 #include "ConsTree.h"
-#include "ConsList.h"
-#include "ConsInt.h"
 #include "Game.h"
 
 ConsTree::ConsTree(const std::string &linear)

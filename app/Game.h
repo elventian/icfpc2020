@@ -29,9 +29,9 @@ private:
 	GameState *state;
 	const int maxTurns = 256;
 	
-	void join() const;
-	void start() const;
-	void sendCommands(const CommandList &cmdList) const;
+	std::string join() const;
+	std::string start() const;
+	std::string sendCommands(const CommandList &cmdList) const;
 	std::string sendRequest(const std::string &req) const;
 };
 
