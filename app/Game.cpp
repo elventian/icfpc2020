@@ -56,6 +56,10 @@ void Game::run()
 					state.getEnemyNum() == 1 && enemy->heating == enemy->maxHeating) {
 					commands.push_back(new Detonate(ship->id));
 				}*/
+				if (ship->role == ShipState::Defender && ship->cloneCounter > 1 && 
+					ship->fuel > 100 && i % 6 == 0) {
+					commands.push_back(new Duplicate(ship->id, 17, 0, 0, 1));
+				}
 			}
 		}
 		const std::string &response = sendCommands(commands);
@@ -185,7 +189,7 @@ std::string Game::start() const
 	//98 30 10 1 = 98 20 10 1, if shoot 5 (not 40) - zero args in shoot
 	//150 40 10 1
 	
-	int fuel = 150, x1 = 40, x2 = 10, clonesCount = 1;
+	int fuel = 150, x1 = 40, x2 = 10, clonesCount = 5;
 	//int fuel = 73, x1 = 70, x2 = 11, clonesCount = 1;
 	undefVars.push_back(fuel);
 	undefVars.push_back(x1);

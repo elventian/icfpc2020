@@ -21,7 +21,7 @@ ShipState::ShipState(const ConsList *shipList)
 	fuel = counters[0]->intVal();
 	horizCounter = counters[1]->intVal();
 	health = counters[2]->intVal();
-	tunnelCounter = counters[3]->intVal();
+	cloneCounter = counters[3]->intVal();
 
 	heating = list[5]->intVal();
 	maxHeating = list[6]->intVal();

@@ -30,7 +30,7 @@ public:
 	int fuel; // checkerboard
 	int horizCounter; // unknown
 	int health; // vertical counter
-	int tunnelCounter; // unknown
+	int cloneCounter; // unknown
 	int heating;
 	int maxHeating;
 	int x7; // Unknown, seems to be always 1.
