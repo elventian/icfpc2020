@@ -4,8 +4,10 @@
 ShipState::ShipState(const ConsList *shipList)
 {
 	const ConsList &list = *(*shipList)[0]->asList();
-	const ConsList &commands = *(*shipList)[1]->asList();
-	(void) commands;
+	if (shipList->size() == 2) {
+		const ConsList &commands = *(*shipList)[1]->asList();
+		(void) commands;
+	}
 
 	role = (Role)list[0]->intVal();
 	id = list[1]->intVal();

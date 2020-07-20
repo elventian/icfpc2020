@@ -24,7 +24,7 @@ public:
 	bool requestWasSuccess;
 	Stage stage;
 	ShipState::Role role;
-	int gameTick;
+	int gameTick = 0;
 
 	std::map<int, ShipStatePtr> ships; // Key is ship id.
 };

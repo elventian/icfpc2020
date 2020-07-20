@@ -14,6 +14,7 @@ GameState::GameState(const ConsTree &response)
 	role = (ShipState::Role)staticGameInfo[1]->intVal();
 
 	const ConsList &gameState = *list[3]->asList();
+	if (gameState.size() != 3) { return; }
 	gameTick = gameState[0]->intVal();
 
 	const ConsList &shipList = *gameState[2]->asList();
