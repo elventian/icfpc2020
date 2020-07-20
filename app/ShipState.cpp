@@ -23,7 +23,7 @@ ShipState::ShipState(const ConsList *shipList)
 
 	heating = list[5]->intVal();
 	maxHeating = list[6]->intVal();
-	clonesCount = list[7]->intVal();
+	x7 = list[7]->intVal();
 }
 
 Vector2 ShipState::nextTickPos() const

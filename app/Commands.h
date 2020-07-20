@@ -52,10 +52,15 @@ private:
 class Duplicate: public Command
 {
 public:
-	Duplicate(int shipId): m_shipId(shipId) {}
+	Duplicate(int shipId, int fuel, int x0, int x1, int clones = 1): 
+		m_shipId(shipId), m_fuel(fuel), m_x0(x0), m_x1(x1), m_clones(clones) {}
 	std::string toLinear() const override;
 private:
 	int m_shipId;
+	int m_fuel;
+	int m_x0;
+	int m_x1;
+	int m_clones;
 };
 
 

@@ -51,17 +51,15 @@ std::string Shoot::toLinear() const
 
 std::string Duplicate::toLinear() const
 {
-	//(3, shipId, (x0, x1, x2, cloneCount))
+	//(3, shipId, (fuel, x1, x2, cloneCount))
 	std::list<int64_t> list;
 	list.push_back(3);
 	list.push_back(m_shipId);
 	
-	int x0 = 120, x1 = 1, x2 = 1, cloneCount = 1;
-	//256, 5, 13, 1 
 	std::list<int64_t> cloneParams;
-	cloneParams.push_back(x0);
-	cloneParams.push_back(x1);
-	cloneParams.push_back(x2);
-	cloneParams.push_back(cloneCount);
+	cloneParams.push_back(m_fuel);
+	cloneParams.push_back(m_x0);
+	cloneParams.push_back(m_x1);
+	cloneParams.push_back(m_clones);
 	return Game::listToLinear(list, Game::listToLinear(cloneParams));
 }
