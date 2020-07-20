@@ -28,15 +28,6 @@ GameState::GameState(const ConsTree &response)
 	}
 }
 
-Vector2 GameState::getVectorToHover(Vector2 &curCoord) const
-{
-	Vector2 normalized = curCoord;
-	normalized.normalize();
-	Vector2 thrust = normalized * Vector2(-1, -1);
-	if (abs(curCoord.x()) > abs(curCoord.y())) { return Vector2(thrust.x(), 0); }
-	return Vector2(0, thrust.y());
-}
-
 Vector2 GameState::getClosestTarget(Vector2 &curCoord) const
 {
 	bool found = false;

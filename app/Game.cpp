@@ -39,14 +39,14 @@ void Game::run()
 		for (auto shipPair: state.ships) {
 			ShipStatePtr &ship = shipPair.second;
 			if (ship->role == state.role) {
-				Vector2 thrust = state.getVectorToHover(ship->position); //TODO call ship method
+				Vector2 thrust = ship->getThrustToHover();
 				commands.push_back(new Accelerate(ship->id, thrust));
-				if (i == 6) {
+				/*if (i == 6) {
 					commands.push_back(
 						new Duplicate(ship->id, ship->fuel/2, ship->horizCounter / 2, ship->health / 2));
-				}
+				}*/
 				Vector2 enemyPos = state.getClosestTarget(ship->position);
-				if (ship->position.chebyshevDist(enemyPos) < 24) {
+				if (ship->position.chebyshevDist(enemyPos) <= 24) {
 					commands.push_back(new Shoot(ship->id, enemyPos, 5));
 				}
 			}
@@ -164,7 +164,7 @@ std::string Game::start() const
 	std::list<int64_t> undefVars;
 	//int x0 = 254, x1 = 3, x2 = 3, x3 = 1;
 	//int x0 = 270, x1 = 30, x2 = 10, x3 = 1; //fail to start
-	int fuel = 254, x1 = 3, x2 = 22, clonesCount = 2;
+	int fuel = 254, x1 = 3, x2 = 3, clonesCount = 1;
 	//256, 5, 13, 1 
 	undefVars.push_back(fuel);
 	undefVars.push_back(x1);
