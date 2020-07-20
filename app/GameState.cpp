@@ -67,6 +67,21 @@ ShipStatePtr GameState::getTarget(Vector2 &curCoord, int maxDist) const
 	return res;
 }
 
+int GameState::checkSwarm(ShipStatePtr &queen) const
+{
+	int swarmers = 0;
+	for (auto shipPair: ships) {
+		ShipStatePtr &ship = shipPair.second;
+		if (ship->role != role) {
+			if (ship->horizCounter > 5 && ship->health > 5) {
+				queen = ship;
+			}
+			else { swarmers++; }
+		}
+	}
+	return swarmers;
+}
+
 int GameState::getEnemyNum() const
 {
 	int i = 0;

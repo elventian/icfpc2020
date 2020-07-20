@@ -43,7 +43,22 @@ void Game::run()
 		for (auto shipPair: state.ships) {
 			ShipStatePtr &ship = shipPair.second;
 			if (ship->role == state.role) {
-				const ShipStatePtr &enemy = state.getTarget(ship->position, 40);
+				ShipStatePtr queen, enemy;
+				int swarmers = state.checkSwarm(queen);
+				if (ship->role == ShipState::Attacker && swarmers > 3) {
+					if (queen)
+					{
+						enemy = queen;
+					}
+					else if (ship->cloneCounter > 1 && ship->fuel > 100) {
+						commands.push_back(new Duplicate(ship->id, ship->fuel/2, 
+							ship->horizCounter/2, ship->health/2, 1));
+					}
+				}
+				if (!enemy) {
+					enemy = state.getClosestTarget(ship->position);
+				}
+				
 				int distToEnemy = ship->position.chebyshevDist(enemy->nextTickPos());
 				if (distToEnemy <= 40 && ship->heating < ship->maxHeating / 2 && ship->fuel > 40) {
 					commands.push_back(new Shoot(ship->id, enemy->nextTickPos(), 40));
