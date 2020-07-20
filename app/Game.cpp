@@ -58,7 +58,7 @@ void Game::run()
 				}*/
 				if (ship->role == ShipState::Defender && ship->cloneCounter > 1 && 
 					ship->fuel > 100 && i % 6 == 0) {
-					commands.push_back(new Duplicate(ship->id, 17, 0, 0, 1));
+					commands.push_back(new Duplicate(ship->id, 15, 0, 0, 1));
 				}
 			}
 		}

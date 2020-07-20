@@ -2,6 +2,18 @@
 #include "ConsList.h"
 #include <math.h>
 
+const Vector2 Vector2::allDirections[8] = 
+{
+	Vector2(1, 0),
+	Vector2(1, 1),
+	Vector2(0, 1),
+	Vector2(0, -1),
+	Vector2(-1, 0),
+	Vector2(-1, 1),
+	Vector2(-1, -1),
+	Vector2(1, -1),
+};
+
 Vector2::Vector2(const ConsList *list)
 {
 	x() = (*list)[0]->intVal();

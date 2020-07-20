@@ -18,6 +18,8 @@ public:
 
 	Vector2 getGravity() const;
 	Vector2 getSomeNormalToGravity() const;
+	
+	static const Vector2 allDirections[8];
 };
 
 class Vector2F
