@@ -51,8 +51,13 @@ Vector2 ShipState::getThrustToKeepOrbit(int orbitRadius) const
 	const Vector2F velocityF = Vector2F(velocity);
 	const Vector2F forceToChangeDirF =
 		Vector2F(gravNormal).ofTheSameLengthAs(velocityF) - velocityF;
-	const Vector2 forceToChangeDir = forceToChangeDirF.integerCapped();
+	Vector2 forceToChangeDir = forceToChangeDirF.integerCapped();
 
+	if (forceToChangeDir.manhDist({0,0}) == 0) {
+		forceToChangeDir = velocity;
+		forceToChangeDir.normalize();
+	}
+	
 	const Vector2 force = forceToIncreaseRadius + forceToChangeDir;
 	return force.capped() * -1;
 }

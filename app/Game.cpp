@@ -167,12 +167,12 @@ std::string Game::start() const
 	list.push_back(3);
 	list.push_back(std::stol(m_playerKey));
 	std::list<int64_t> undefVars;
-	//int x0 = 254, x1 = 3, x2 = 3, x3 = 1; - overheat of thrust usage (+5/turn). when reach maximum - drastically increases
+	//int x0 = 254, x1 = 3, x2 = 3, x3 = 1; - heat of thrust usage (+5/turn). when reach maximum - drastically increases
 	//int x0 = 270, x1 = 30, x2 = 10, x3 = 1; //fail to start
 	//98,70,11,1
 	//98, 3, 22, 1 - fail to start
 	//270, 10, 3, 1 - started, overheat of thrust usage (+5/turn)
-	//256, 5, 13, 1 - miniks head
+	//256, 5, 13, 1 - miniks head - no heat of thrust usage
 	//98 0 0 1 - when fuel becomes 0 - die!
 	//98 5 0 1 - overheat of thrust usage (+8/turn) but not die when fuel 0
 	//134 64 10 1 - Unagi: fail to start!
