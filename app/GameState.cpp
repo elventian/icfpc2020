@@ -37,10 +37,30 @@ ShipStatePtr GameState::getClosestTarget(Vector2 &curCoord) const
 		ShipStatePtr &ship = shipPair.second;
 		if (ship->role != role) {
 			Vector2 nextPos = ship->nextTickPos();
-			if (!found || curCoord.manhDist(nextPos) < curDist) {
+			if (!found || curCoord.dist(nextPos) < curDist) {
 				found = true;
-				curDist = curCoord.manhDist(nextPos);
+				curDist = curCoord.dist(nextPos);
 				res = ship;
+			}
+		}
+	}
+	return res;
+}
+
+ShipStatePtr GameState::getTarget(Vector2 &curCoord, int maxDist) const
+{
+	bool found = false;
+	ShipStatePtr res;
+	for (auto shipPair: ships) {
+		ShipStatePtr &ship = shipPair.second;
+		if (ship->role != role) {
+			Vector2 nextPos = ship->nextTickPos();
+			if (!found || (curCoord.dist(nextPos) < maxDist && 
+				((res->maxHeating - res->heating) > (ship->maxHeating - ship->heating) ||
+				res->fuel < ship->fuel || curCoord.dist(res->position) > curCoord.dist((ship->position)))))
+			{
+				found = true;
+				res = ship;					
 			}
 		}
 	}
