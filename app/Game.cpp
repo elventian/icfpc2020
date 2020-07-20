@@ -66,17 +66,12 @@ void Game::run()
 				if (ship->fuel < 15 && ship->horizCounter == 0 && state.getEnemyNumNear(ship->position, 10) > 0) {
 					commands.push_back(new Detonate(ship->id));
 				}
-				/*if (i == 6) {
-					commands.push_back(
-						new Duplicate(ship->id, ship->fuel/2, ship->horizCounter / 2, ship->health / 2));
-				}*/
-				
 				/*if (ship->role == ShipState::Attacker && distToEnemy <= 8 && 
 					state.getEnemyNum() == 1 && enemy->heating == enemy->maxHeating) {
 					commands.push_back(new Detonate(ship->id));
 				}*/
 				if (ship->role == ShipState::Defender && ship->cloneCounter > 1 && 
-					i > 0 && thrust == Vector2(0, 0)) {
+					i > 0 && thrust == Vector2(0, 0) && ship->velocity.chebyshevDist({0,0}) >= 6) {
 					int fuel = ship->fuel;
 					for (int j = 0; j < ship->cloneCounter; j++) {
 						if (fuel > 100) {
