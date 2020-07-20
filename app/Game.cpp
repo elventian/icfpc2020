@@ -171,8 +171,9 @@ std::string Game::start() const
 	//256, 5, 13, 1 - miniks head
 	//98 0 0 1 - when fuel becomes 0 - die!
 	//98 5 0 1
+	//134 64 10 1 - Unagi
 	
-	int fuel = 98, x1 = 5, x2 = 0, clonesCount = 1;
+	int fuel = 134, x1 = 64, x2 = 10, clonesCount = 1;
 	undefVars.push_back(fuel);
 	undefVars.push_back(x1);
 	undefVars.push_back(x2);
