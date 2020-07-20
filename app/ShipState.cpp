@@ -1,6 +1,8 @@
 #include "ShipState.h"
 #include "ConsList.h"
 
+static constexpr int planetRadius = 16;
+
 ShipState::ShipState(const ConsList *shipList)
 {
 	const ConsList &list = *(*shipList)[0]->asList();
@@ -34,11 +36,18 @@ Vector2 ShipState::nextTickPos() const
 
 Vector2 ShipState::getThrustToKeepOrbit(int lesserRadius, int greaterRadius) const
 {
-	const Vector2 prevPosition = position - velocity;
-	const bool approachingPlanet =
-		position.squaredDist({0, 0}) <= prevPosition.squaredDist({0, 0});
-	const int radius = approachingPlanet? greaterRadius : lesserRadius;
-	if (position.chebyshevDist({0, 0}) >= radius) { return Vector2(0, 0); }
+	bool dangerousApproaching =
+		(velocity.dotProduct(position.getGravity()) > 0)
+		&& (Vector2(0, 0).squaredDistToLine(position, position + velocity) <=
+			planetRadius * planetRadius);
+
+	if (!dangerousApproaching) {
+		const Vector2 prevPosition = position - velocity;
+		const bool approachingPlanet =
+			position.squaredDist({0, 0}) <= prevPosition.squaredDist({0, 0});
+		const int radius = approachingPlanet? greaterRadius : lesserRadius;
+		if (position.chebyshevDist({0, 0}) >= radius) { return Vector2(0, 0); }
+	}
 
 	const Vector2 forceToIncreaseRadius = position.getGravity() * -1;
 

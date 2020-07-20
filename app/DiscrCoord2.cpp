@@ -26,6 +26,16 @@ int DiscrCoord2::chebyshevDist(const DiscrCoord2 &other) const {
 	return std::max(dx, dy);
 }
 
+double DiscrCoord2::squaredDistToLine(const DiscrCoord2 &lp1, const DiscrCoord2 &lp2)
+{
+	const int dy = lp2.y() - lp1.y();
+	const int dx = lp2.x() - lp1.x();
+	const int num =
+		dy * x() - dx * y() + lp2.x() * lp1.y() - lp2.y() * lp1.x();
+	const int denomSquared = dy*dy + dx*dx;
+	return num * num / (double) denomSquared;
+}
+
 DiscrCoord2 DiscrCoord2::toGrid(int gridStep) const {
 	DiscrCoord2 res = *this / gridStep;
 	if (c[X] < 0 && (c[X] % gridStep) != 0) res.c[X]--;

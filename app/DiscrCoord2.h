@@ -44,6 +44,7 @@ public:
 	int squaredDist(const DiscrCoord2 &other) const;
 	int dist(const DiscrCoord2 &other) const;
 	int chebyshevDist(const DiscrCoord2 &other) const;
+	double squaredDistToLine(const DiscrCoord2 &linePoint1, const DiscrCoord2 &linePoint2);
 	int dotProduct(const DiscrCoord2 &other) const { return x() * other.x() + y() * other.y(); }
 	DiscrCoord2 toGrid(int gridStep) const;
 	DiscrCoord2 toInGrid(int gridStep) const;
