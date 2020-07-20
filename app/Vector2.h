@@ -33,6 +33,7 @@ public:
 	double y() const { return m_y; }
 	double length() const;
 	double dotProduct(const Vector2F &other) const { return m_x * other.m_x + m_y * other.m_y; }
+	double dotProductNormalized(const Vector2F &other) const;
 	Vector2 roundedVector2() const;
 	Vector2F operator*(double mult) const { return Vector2F(m_x * mult, m_y *mult); }
 	Vector2F operator-(const Vector2F &other) const;

@@ -36,11 +36,12 @@ Vector2 Vector2::capped() const
 
 Vector2 Vector2::getBestDirection() const
 {
-	int bestProduct = INT_MIN;
+	double bestProduct = INT_MIN;
 	const Vector2 *bestDir = nullptr;
+	const Vector2F f(*this);
 	for (int i=0; i < 8; ++i) {
 		const Vector2 &dir = allDirections[i];
-		int product = dotProduct(dir);
+		double product = f.dotProductNormalized(dir);
 		if (product > bestProduct) {
 			bestProduct	= product;
 			bestDir = &dir;
@@ -92,6 +93,11 @@ Vector2 Vector2::getCodirectionalNormalToGravity(const Vector2 &direction) const
 double Vector2F::length() const
 {
 	return sqrt(m_x*m_x + m_y*m_y);
+}
+
+double Vector2F::dotProductNormalized(const Vector2F &other) const
+{
+	return normalized().dotProduct(other.normalized());
 }
 
 Vector2 Vector2F::roundedVector2() const

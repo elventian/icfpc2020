@@ -37,6 +37,12 @@ Vector2 ShipState::nextTickPos() const
 
 Vector2 ShipState::getThrustToKeepOrbit(int lesserRadius, int greaterRadius) const
 {
+	// If velocity is zero or parallel fravity, go out of planet perpendicular to gravity.
+	if (position.getSomeNormalToGravity().dotProduct(velocity)) {
+		return Vector2(position.getCodirectionalNormalToGravity(position)
+			+ (position.getGravity() * -1)).capped() * -1;
+	}
+
 	const bool dangerousApproaching =
 		(velocity.dotProduct(position.getGravity()) > 0)
 		&& (Vector2(0, 0).squaredDistToLine(position, position + velocity) <=
@@ -47,7 +53,8 @@ Vector2 ShipState::getThrustToKeepOrbit(int lesserRadius, int greaterRadius) con
 		const bool approachingPlanet =
 			position.squaredDist({0, 0}) <= prevPosition.squaredDist({0, 0});
 		const int radius = approachingPlanet? greaterRadius : lesserRadius;
-		if (position.chebyshevDist({0, 0}) >= radius) { return Vector2(0, 0); }
+		// 2 is sqrt(2) squared.
+		if (position.chebyshevDist({0, 0}) >= 2 * radius) { return Vector2(0, 0); }
 	}
 
 	const Vector2 forceToIncreaseRadius = position.getGravity() * -1;
@@ -55,7 +62,6 @@ Vector2 ShipState::getThrustToKeepOrbit(int lesserRadius, int greaterRadius) con
 	Vector2 gravNormal(0, 0);
 	const bool velocityAcceptable = velocity.chebyshevDist({0, 0}) <= 7;
 	if (dangerousApproaching || velocityAcceptable) {
-		// If velocity == 0, this line arbitrary defines initial rotation direction.
 		gravNormal = position.getCodirectionalNormalToGravity(velocity);
 	}
 
@@ -69,19 +75,22 @@ Vector2 ShipState::getThrustToKeepOrbitOrApproach(
 	const Vector2 thrust = getThrustToKeepOrbit(lesserRadius, greaterRadius);
 	if (!thrust.isZero()) { return thrust; }
 
+	// Don't play approach games too close to border.
+	if (position.chebyshevDist({0, 0}) >= 96) { return Vector2(0, 0); }
+
 	// Approach will happen soon without help or never if velocities are opposite.
 	if (velocity.dotProduct(target.velocity) < 0) { return Vector2(0, 0); }
 
 	const Vector2 toTarget = target.nextTickPos() - position;
-	const Vector2F toTargetFNorm = Vector2F(toTarget).normalized();
+	const Vector2F toTargetF = Vector2F(toTarget);
 	const double gravityAffinity =
-		toTargetFNorm.dotProduct(Vector2F(position.getGravity()).normalized());
+		toTargetF.dotProductNormalized(position.getGravity());
 	const Vector2 gravNormal = position.getCodirectionalNormalToGravity(toTarget);
 
 	// 2.0 is empiric value.
 	const bool approachWorth =
 		(gravityAffinity <= 0)
-		|| toTargetFNorm.dotProduct(Vector2F(gravNormal).normalized()) >= 2.0 * gravityAffinity;
+		|| toTargetF.dotProductNormalized(gravNormal) >= 2.0 * gravityAffinity;
 	if (!approachWorth) { return Vector2(0, 0); }
 
 	const Vector2 projection = Vector2F(toTarget).projection(gravNormal).roundedVector2();
