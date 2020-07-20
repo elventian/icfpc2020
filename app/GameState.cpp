@@ -9,6 +9,7 @@ GameState::GameState(const ConsTree &response)
 
 	requestWasSuccess = list[0]->intVal();
 	stage = (Stage)list[1]->intVal();
+	if (stage == Stage::Finished) { exit(0); }
 
 	const ConsList &staticGameInfo = *list[2]->asList();
 	role = (ShipState::Role)staticGameInfo[1]->intVal();
@@ -30,7 +31,9 @@ GameState::GameState(const ConsTree &response)
 Vector2 GameState::getVectorToHover() const
 {
 	Vector2 mycoord = getMyShip()->position;
-	Vector2 thrust = mycoord.normalize() * Vector2(-1, -1);
+	Vector2 normalized = mycoord;
+	normalized.normalize();
+	Vector2 thrust = normalized * Vector2(-1, -1);
 	if (abs(mycoord.x()) > abs(mycoord.y())) { return Vector2(thrust.x(), 0); }
 	return Vector2(0, thrust.y());
 }
