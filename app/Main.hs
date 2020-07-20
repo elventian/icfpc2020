@@ -42,10 +42,14 @@ loop r url key  = do
     let (eid, epos, evel) = findShId (BNum (1-rv)) shipsnadcommands
     let (BPart "cons_2" [BNum ex, BNum ey]) = epos
     let (BPart "cons_2" [BNum evx, BNum evy]) = evel
+    let (ax, ay) = (-127 * signum ex, -127 * signum ey)
+    let mCmd = if abs ax == 127 || abs ay == 127 ||rv==0
+               then BList[BNum 0, shid, (BPart "cons_2" [BNum (if abs x > abs y then (-x `div` (abs x)) else 0),BNum (if abs y > abs x then (-y `div` (abs y)) else 0)])]
+               else BList[BNum 0, shid, (BPart "cons_2" [BNum (signum $ x - ax),BNum (signum $ y - ay)])]
     if stage == BNum 2
     then return ()
-    else do let BMod mes = evalBlock' $  BApp (BName "mod") $ BList [BNum 4, BNum key, BList[BList[BNum 0, shid, (BPart "cons_2" [BNum (if abs x > abs y then (-x `div` (abs x)) else 0),BNum (if abs y > abs x then (-y `div` (abs y)) else 0)])],
-                                                                                             BList [BNum 2, shid, BPart "cons_2" [BNum (ex+evx), BNum (ey+evy)] , BNum 30]
+    else do let BMod mes = evalBlock' $  BApp (BName "mod") $ BList [BNum 4, BNum key, BList[mCmd
+                                                                                             {-,BList [BNum 2, shid, BPart "cons_2" [BNum (ex+evx), BNum (ey+evy)] , BNum 30]-}
                                                                                             ]]
             r1 <- send url mes
             loop r1 url key
@@ -57,7 +61,10 @@ main = catch (
         let BMod mes = evalBlock' $  BApp (BName "mod") $ BList [BNum 2, BNum (read$args!!1), BNil]
         --r <- send (args!!0) (args!!1)
         r <- send (args!!0 ++ "/aliens/send") mes
-        let BMod mes1 = evalBlock' $  BApp (BName "mod") $ BList [BNum 3, BNum (read$args!!1), BList[BNum 256, BNum 30, BNum 13, BNum 1]]
+        let role = evalBlock' $ BApp (BName "car") $ BApp (BName "cdr") $BApp (BName "car") $ BApp (BName "cdr") $ BApp (BName "cdr") r
+        let BMod mes1 = if (role == BNum 1)
+                        then evalBlock' $  BApp (BName "mod") $ BList [BNum 3, BNum (read$args!!1), BList[BNum 326, BNum 0, BNum 10, BNum 1]]
+                        else evalBlock' $  BApp (BName "mod") $ BList [BNum 3, BNum (read$args!!1), BList[BNum 134, BNum 64, BNum 10, BNum 1]]
         r <- send (args!!0 ++ "/aliens/send") mes1
         
         loop r (args!!0 ++ "/aliens/send")  (read$args!!1)
