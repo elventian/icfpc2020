@@ -166,8 +166,10 @@ std::string Game::start() const
 	//int x0 = 254, x1 = 3, x2 = 3, x3 = 1; - overheat of thrust usage. when reach maximum - drastically increases
 	//int x0 = 270, x1 = 30, x2 = 10, x3 = 1; //fail to start
 	//98,70,11,1
+	//98, 3, 22, 1 -//fail to start
+	//270, 10, 3, 1 -//fail to start
 	
-	int fuel = 98, x1 = 70, x2 = 11, clonesCount = 1;
+	int fuel = 270, x1 = 10, x2 = 3, clonesCount = 1;
 	//256, 5, 13, 1 
 	undefVars.push_back(fuel);
 	undefVars.push_back(x1);
