@@ -38,7 +38,7 @@ Vector2 ShipState::nextTickPos() const
 Vector2 ShipState::getThrustToKeepOrbit(int lesserRadius, int greaterRadius) const
 {
 	// If velocity is zero or parallel fravity, go out of planet perpendicular to gravity.
-	if (position.getSomeNormalToGravity().dotProduct(velocity)) {
+	if (position.getSomeNormalToGravity().dotProduct(velocity) == 0) {
 		return Vector2(position.getCodirectionalNormalToGravity(position)
 			+ (position.getGravity() * -1)).capped() * -1;
 	}
