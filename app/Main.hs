@@ -38,6 +38,7 @@ loop r url key  = do
     let shipsnadcommands = evalBlock' $ BApp (BName "car") $ BApp (BName "cdr") $ BApp (BName "cdr") $BApp (BName "car") $ BApp (BName "cdr") $ BApp (BName "cdr") $ BApp (BName "cdr") r
     let (shid, pos, vel) = findShId role shipsnadcommands
     let (BPart "cons_2" [BNum x, BNum y]) = pos
+    let (BPart "cons_2" [BNum vx, BNum vy]) = vel
     let (BNum rv) = role
     let (eid, epos, evel) = findShId (BNum (1-rv)) shipsnadcommands
     let (BPart "cons_2" [BNum ex, BNum ey]) = epos
@@ -45,7 +46,7 @@ loop r url key  = do
     let (ax, ay) = (-127 * signum ex, -127 * signum ey)
     let mCmd = if (abs x >= 127 || abs y >= 127) && signum x == signum ax && signum y == signum ay ||rv==0
                then BList[BNum 0, shid, (BPart "cons_2" [BNum (if abs x > abs y then (-x `div` (abs x)) else 0),BNum (if abs y > abs x then (-y `div` (abs y)) else 0)])]
-               else BList[BNum 0, shid, (BPart "cons_2" [BNum (signum $ x - ax),BNum (signum $ y - ay)])]
+               else BList[BNum 0, shid, (BPart "cons_2" [BNum (if signum  (x - ax) == -1 * signum vx then 0 else signum $ x - ax),BNum (if signum (y - ay) == -1 * signum vy then 0 else signum $ y - ay)])]
     if stage == BNum 2
     then return ()
     else do let BMod mes = evalBlock' $  BApp (BName "mod") $ BList [BNum 4, BNum key, BList[mCmd
