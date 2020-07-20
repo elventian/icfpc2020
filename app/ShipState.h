@@ -21,7 +21,7 @@ public:
 	Vector2 getThrustToHover() const { return position.getGravity(); }
 	Vector2 getThrustToKeepOrbit(int lesserRadius, int greaterRadius) const;
 	Vector2 getThrustToKeepOrbitOrApproach(
-		int lesserRadius, int greaterRadius, const Vector2 &target) const;
+		int lesserRadius, int greaterRadius, const ShipState &target) const;
 
 	Role role;
 	int id;

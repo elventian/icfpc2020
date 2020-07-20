@@ -15,9 +15,11 @@ public:
 	Vector2(const ConsList *list);
 
 	Vector2 capped() const;
+	Vector2 getBestDirection() const;
 
 	Vector2 getGravity() const;
 	Vector2 getSomeNormalToGravity() const;
+	Vector2 getCodirectionalNormalToGravity(const Vector2 &direction) const;
 	
 	static const Vector2 allDirections[8];
 };
@@ -30,10 +32,14 @@ public:
 	double x() const { return m_x; }
 	double y() const { return m_y; }
 	double length() const;
+	double dotProduct(const Vector2F &other) const { return m_x * other.m_x + m_y * other.m_y; }
+	Vector2 roundedVector2() const;
 	Vector2F operator*(double mult) const { return Vector2F(m_x * mult, m_y *mult); }
 	Vector2F operator-(const Vector2F &other) const;
 	Vector2F ofTheSameLengthAs(const Vector2F &other) const;
 	Vector2 integerCapped() const;
+	Vector2F normalized() const;
+	Vector2F projection(const Vector2F &base) const;
 
 private:
 	double m_x;

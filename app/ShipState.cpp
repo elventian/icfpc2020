@@ -1,5 +1,6 @@
 #include "ShipState.h"
 #include "ConsList.h"
+#include <math.h>
 
 static constexpr int planetRadius = 16;
 
@@ -36,7 +37,7 @@ Vector2 ShipState::nextTickPos() const
 
 Vector2 ShipState::getThrustToKeepOrbit(int lesserRadius, int greaterRadius) const
 {
-	bool dangerousApproaching =
+	const bool dangerousApproaching =
 		(velocity.dotProduct(position.getGravity()) > 0)
 		&& (Vector2(0, 0).squaredDistToLine(position, position + velocity) <=
 			planetRadius * planetRadius);
@@ -51,31 +52,34 @@ Vector2 ShipState::getThrustToKeepOrbit(int lesserRadius, int greaterRadius) con
 
 	const Vector2 forceToIncreaseRadius = position.getGravity() * -1;
 
-	// Choose normal to gravity with direction closer to velocity.
-
-	// If velocity == 0, this line arbitrary defines initial rotation direction.
-	Vector2 gravNormal = position.getSomeNormalToGravity();
-
-	const Vector2 oppositeGravNormal = gravNormal * -1;
-	if (velocity.dotProduct(oppositeGravNormal) > velocity.dotProduct(gravNormal)) {
-		gravNormal = oppositeGravNormal;
+	Vector2 gravNormal(0, 0);
+	const bool velocityAcceptable = velocity.chebyshevDist({0, 0}) <= 7;
+	if (dangerousApproaching || velocityAcceptable) {
+		// If velocity == 0, this line arbitrary defines initial rotation direction.
+		gravNormal = position.getCodirectionalNormalToGravity(velocity);
 	}
 
-	const bool velocityLimited = velocity.chebyshevDist({0, 0}) >= 8;
-	const Vector2 forceToChangeDir = velocityLimited? Vector2(0, 0) : gravNormal;
-
-	const Vector2 force = forceToIncreaseRadius + forceToChangeDir;
+	const Vector2 force = forceToIncreaseRadius + gravNormal;
 	return force.capped() * -1;
 }
 
 Vector2 ShipState::getThrustToKeepOrbitOrApproach(
-	int lesserRadius, int greaterRadius, const Vector2 &target) const
+	int lesserRadius, int greaterRadius, const ShipState &target) const
 {
 	const Vector2 thrust = getThrustToKeepOrbit(lesserRadius, greaterRadius);
 	if (!thrust.isZero()) { return thrust; }
 
-	const Vector2 toTarget = target - position;
-	if (toTarget.dotProduct(position.getGravity()) > 0) { return Vector2(0, 0); }
+	// Approach will happen soon without help if velocities are opposite.
+	if (velocity.dotProduct(target.velocity) < 0) { return Vector2(0, 0); }
 
-	return Vector2(0, 0); // TODO: Implement.
+	const Vector2 toTarget = target.position - position;
+	const int gravityAffinity = toTarget.dotProduct(position.getGravity());
+	const Vector2 gravNormal = position.getCodirectionalNormalToGravity(toTarget);
+	const bool approachWorth =
+		(gravityAffinity <= 0)
+		|| toTarget.dotProduct(gravNormal) >= gravityAffinity;
+	if (!approachWorth) { return Vector2(0, 0); }
+
+	const Vector2 projection = Vector2F(toTarget).projection(gravNormal).roundedVector2();
+	return projection.getBestDirection() * -1;
 }
