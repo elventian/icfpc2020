@@ -69,17 +69,27 @@ Vector2 ShipState::getThrustToKeepOrbitOrApproach(
 	const Vector2 thrust = getThrustToKeepOrbit(lesserRadius, greaterRadius);
 	if (!thrust.isZero()) { return thrust; }
 
-	// Approach will happen soon without help if velocities are opposite.
+	// Approach will happen soon without help or never if velocities are opposite.
 	if (velocity.dotProduct(target.velocity) < 0) { return Vector2(0, 0); }
 
-	const Vector2 toTarget = target.position - position;
-	const int gravityAffinity = toTarget.dotProduct(position.getGravity());
+	const Vector2 toTarget = target.nextTickPos() - position;
+	const Vector2F toTargetFNorm = Vector2F(toTarget).normalized();
+	const double gravityAffinity =
+		toTargetFNorm.dotProduct(Vector2F(position.getGravity()).normalized());
 	const Vector2 gravNormal = position.getCodirectionalNormalToGravity(toTarget);
+
+	// 2.0 is empiric value.
 	const bool approachWorth =
 		(gravityAffinity <= 0)
-		|| toTarget.dotProduct(gravNormal) >= gravityAffinity;
+		|| toTargetFNorm.dotProduct(Vector2F(gravNormal).normalized()) >= 2.0 * gravityAffinity;
 	if (!approachWorth) { return Vector2(0, 0); }
 
 	const Vector2 projection = Vector2F(toTarget).projection(gravNormal).roundedVector2();
-	return projection.getBestDirection() * -1;
+	const Vector2 accel = projection.getBestDirection();
+
+	// If approaching would accelerate us even more at too high velocity, don't approach.
+	if (accel.dotProduct(velocity) > 0 && velocity.chebyshevDist({0, 0}) > 7) {
+		return Vector2(0, 0);
+	}
+	return accel * -1;
 }
