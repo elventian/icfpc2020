@@ -19,7 +19,9 @@ public:
 
 	Vector2 nextTickPos() const; // If no thrust expected.
 	Vector2 getThrustToHover() const { return position.getGravity(); }
-	Vector2 getThrustToKeepOrbit(int orbitRadius) const;
+	Vector2 getThrustToKeepOrbit(int lesserRadius, int greaterRadius) const;
+	Vector2 getThrustToKeepOrbitOrApproach(
+		int lesserRadius, int greaterRadius, const Vector2 &target) const;
 
 	Role role;
 	int id;

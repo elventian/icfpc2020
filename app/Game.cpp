@@ -41,7 +41,7 @@ void Game::run()
 			ShipStatePtr &ship = shipPair.second;
 			if (ship->role == state.role) {
 				//Vector2 thrust = ship->getThrustToHover();
-				Vector2 thrust = ship->getThrustToKeepOrbit(48);
+				Vector2 thrust = ship->getThrustToKeepOrbit(32, 48);
 				commands.push_back(new Accelerate(ship->id, thrust));
 				/*if (i == 6) {
 					commands.push_back(

@@ -39,6 +39,7 @@ public:
 	DiscrCoord2 operator*(int mult) const { return DiscrCoord2(x()*mult, y()*mult); }
 	DiscrCoord2 operator*(const DiscrCoord2 &mult) const { return DiscrCoord2(x()*mult.x(), y()*mult.y()); }
 	DiscrCoord2 operator/(int divisor) const { return DiscrCoord2(x()/divisor, y()/divisor); }
+	bool isZero() const { return x() == 0 && y() == 0; }
 	int manhDist(const DiscrCoord2 &other) const;
 	int squaredDist(const DiscrCoord2 &other) const;
 	int dist(const DiscrCoord2 &other) const;

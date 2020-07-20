@@ -32,9 +32,13 @@ Vector2 ShipState::nextTickPos() const
 	return position + newVelocity;
 }
 
-Vector2 ShipState::getThrustToKeepOrbit(int orbitRadius) const
+Vector2 ShipState::getThrustToKeepOrbit(int lesserRadius, int greaterRadius) const
 {
-	if (position.chebyshevDist({0, 0}) >= orbitRadius) { return Vector2(0, 0); }
+	const Vector2 prevPosition = position - velocity;
+	const bool approachingPlanet =
+		position.squaredDist({0, 0}) <= prevPosition.squaredDist({0, 0});
+	const int radius = approachingPlanet? greaterRadius : lesserRadius;
+	if (position.chebyshevDist({0, 0}) >= radius) { return Vector2(0, 0); }
 
 	const Vector2 forceToIncreaseRadius = position.getGravity() * -1;
 
@@ -52,4 +56,16 @@ Vector2 ShipState::getThrustToKeepOrbit(int orbitRadius) const
 
 	const Vector2 force = forceToIncreaseRadius + forceToChangeDir;
 	return force.capped() * -1;
+}
+
+Vector2 ShipState::getThrustToKeepOrbitOrApproach(
+	int lesserRadius, int greaterRadius, const Vector2 &target) const
+{
+	const Vector2 thrust = getThrustToKeepOrbit(lesserRadius, greaterRadius);
+	if (!thrust.isZero()) { return thrust; }
+
+	const Vector2 toTarget = target - position;
+	if (toTarget.dotProduct(position.getGravity()) > 0) { return Vector2(0, 0); }
+
+	return Vector2(0, 0); // TODO: Implement.
 }
