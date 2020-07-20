@@ -47,8 +47,12 @@ void Game::run()
 						new Duplicate(ship->id, ship->fuel/2, ship->horizCounter / 2, ship->health / 2));
 				}*/
 				Vector2 enemyPos = state.getClosestTarget(ship->position);
-				if (ship->position.chebyshevDist(enemyPos) <= 24) {
+				int distToEnemy = ship->position.chebyshevDist(enemyPos);
+				if (distToEnemy <= 24) {
 					commands.push_back(new Shoot(ship->id, enemyPos, 5));
+				}
+				if (ship->role == ShipState::Attacker && distToEnemy <= 8 && state.getEnemyNum() == 1) {
+					commands.push_back(new Detonate(ship->id));
 				}
 			}
 		}
@@ -176,7 +180,7 @@ std::string Game::start() const
 	//98 5 5 1 (+3/turn)
 	//98 10 10 1
 	
-	int fuel = 98, x1 = 10, x2 = 10, clonesCount = 1;
+	int fuel = 256, x1 = 5, x2 = 13, clonesCount = 1;
 	undefVars.push_back(fuel);
 	undefVars.push_back(x1);
 	undefVars.push_back(x2);

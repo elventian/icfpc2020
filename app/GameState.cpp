@@ -47,6 +47,16 @@ Vector2 GameState::getClosestTarget(Vector2 &curCoord) const
 	return res;
 }
 
+int GameState::getEnemyNum() const
+{
+	int i = 0;
+	for (auto shipPair: ships) {
+		ShipStatePtr &ship = shipPair.second;
+		if (ship->role != role) { i++; }
+	}
+	return i;
+}
+
 int GameState::getMyShipId() const
 {
 	for (auto shipPair: ships) {
