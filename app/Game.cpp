@@ -170,11 +170,12 @@ std::string Game::start() const
 	//270, 10, 3, 1 - started, overheat of thrust usage (+5/turn)
 	//256, 5, 13, 1 - miniks head
 	//98 0 0 1 - when fuel becomes 0 - die!
-	//98 5 0 1
-	//134 64 10 1 - Unagi
-	//98 0 5 1
+	//98 5 0 1 - overheat of thrust usage (+8/turn) but not die when fuel 0
+	//134 64 10 1 - Unagi: fail to start!
+	//98 0 5 1 - overheat of thrust usage (+3/turn)
+	//98 5 5 1
 	
-	int fuel = 98, x1 = 0, x2 = 5, clonesCount = 1;
+	int fuel = 98, x1 = 5, x2 = 5, clonesCount = 1;
 	undefVars.push_back(fuel);
 	undefVars.push_back(x1);
 	undefVars.push_back(x2);
