@@ -45,7 +45,7 @@ void Game::run()
 			if (ship->role == state.role) {
 				const ShipStatePtr &enemy = state.getClosestTarget(ship->position);
 				int distToEnemy = ship->position.chebyshevDist(enemy->nextTickPos());
-				if (distToEnemy <= 40 && ship->heating < ship->maxHeating / 2 && ship->fuel > 40) {
+				if (distToEnemy <= 60 && ship->heating < ship->maxHeating / 2 && ship->fuel > 40) {
 					commands.push_back(new Shoot(ship->id, enemy->nextTickPos(), 40));
 				}
 				Vector2 thrust = (ship->role == ShipState::Defender) ? 
