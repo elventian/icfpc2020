@@ -43,7 +43,7 @@ void Game::run()
 		for (auto shipPair: state.ships) {
 			ShipStatePtr &ship = shipPair.second;
 			if (ship->role == state.role) {
-				const ShipStatePtr &enemy = state.getClosestTarget(ship->position);
+				const ShipStatePtr &enemy = state.getTarget(ship->position, 40);
 				int distToEnemy = ship->position.chebyshevDist(enemy->nextTickPos());
 				if (distToEnemy <= 40 && ship->heating < ship->maxHeating / 2 && ship->fuel > 40) {
 					commands.push_back(new Shoot(ship->id, enemy->nextTickPos(), 40));
