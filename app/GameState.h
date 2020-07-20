@@ -18,10 +18,7 @@ public:
 
 	GameState(const ConsTree &response);
 	ShipStatePtr getClosestTarget(Vector2 &curCoord) const;
-	ShipStatePtr getTarget(Vector2 &curCoord, int maxDist) const;
-	int checkSwarm(ShipStatePtr &queen) const;
 	int getEnemyNum() const;
-	int getEnemyNumNear(Vector2 &curCoord, int distance) const;
 	int getMyShipId() const;
 	const ShipStatePtr &getMyShip() const;
 

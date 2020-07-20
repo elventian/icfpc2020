@@ -47,57 +47,12 @@ ShipStatePtr GameState::getClosestTarget(Vector2 &curCoord) const
 	return res;
 }
 
-ShipStatePtr GameState::getTarget(Vector2 &curCoord, int maxDist) const
-{
-	bool found = false;
-	ShipStatePtr res;
-	for (auto shipPair: ships) {
-		ShipStatePtr &ship = shipPair.second;
-		if (ship->role != role) {
-			Vector2 nextPos = ship->nextTickPos();
-			if (!found || (curCoord.dist(nextPos) < maxDist && 
-				((res->maxHeating - res->heating) > (ship->maxHeating - ship->heating) ||
-				res->fuel < ship->fuel || curCoord.dist(res->position) > curCoord.dist((ship->position)))))
-			{
-				found = true;
-				res = ship;					
-			}
-		}
-	}
-	return res;
-}
-
-int GameState::checkSwarm(ShipStatePtr &queen) const
-{
-	int swarmers = 0;
-	for (auto shipPair: ships) {
-		ShipStatePtr &ship = shipPair.second;
-		if (ship->role != role) {
-			if (ship->horizCounter > 5 && ship->health > 5) {
-				queen = ship;
-			}
-			else { swarmers++; }
-		}
-	}
-	return swarmers;
-}
-
 int GameState::getEnemyNum() const
 {
 	int i = 0;
 	for (auto shipPair: ships) {
 		ShipStatePtr &ship = shipPair.second;
 		if (ship->role != role) { i++; }
-	}
-	return i;
-}
-
-int GameState::getEnemyNumNear(Vector2 &curCoord, int distance) const
-{
-	int i = 0;
-	for (auto shipPair: ships) {
-		ShipStatePtr &ship = shipPair.second;
-		if (ship->role != role && ship->position.dist(curCoord) < distance) { i++; }
 	}
 	return i;
 }
