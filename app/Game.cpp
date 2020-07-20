@@ -44,6 +44,10 @@ void Game::run()
 				if (i == 6) {
 					commands.push_back(new Duplicate(ship->id));
 				}
+				Vector2 enemyPos = state.getClosestTarget(ship->position);
+				if (ship->position.chebyshevDist(enemyPos) < 24) {
+					commands.push_back(new Shoot(ship->id, enemyPos, 5));
+				}
 			}
 		}
 		//shoot->setTarget(Vector2(0,0)); //TODO

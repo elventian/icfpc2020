@@ -37,6 +37,25 @@ Vector2 GameState::getVectorToHover(Vector2 &curCoord) const
 	return Vector2(0, thrust.y());
 }
 
+Vector2 GameState::getClosestTarget(Vector2 &curCoord) const
+{
+	bool found = false;
+	int curDist = -1;
+	Vector2 res;
+	for (auto shipPair: ships) {
+		ShipStatePtr &ship = shipPair.second;
+		if (ship->role != role) {
+			Vector2 nextPos = ship->nextTickPos();
+			if (!found || curCoord.manhDist(nextPos) < curDist) {
+				found = true;
+				curDist = curCoord.manhDist(nextPos);
+				res = nextPos;
+			}
+		}
+	}
+	return res;
+}
+
 int GameState::getMyShipId() const
 {
 	for (auto shipPair: ships) {
