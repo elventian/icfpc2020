@@ -92,6 +92,16 @@ int GameState::getEnemyNum() const
 	return i;
 }
 
+int GameState::getEnemyNumNear(Vector2 &curCoord, int distance) const
+{
+	int i = 0;
+	for (auto shipPair: ships) {
+		ShipStatePtr &ship = shipPair.second;
+		if (ship->role != role && ship->position.dist(curCoord) < distance) { i++; }
+	}
+	return i;
+}
+
 int GameState::getMyShipId() const
 {
 	for (auto shipPair: ships) {
