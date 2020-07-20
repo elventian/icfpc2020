@@ -36,6 +36,7 @@ void Game::run()
 	GameState state = GameState(startTree);
 	for (int i = 0; i < maxTurns; i++) {
 		CommandList commands;
+		bool clonesAccelerated = false;
 		//set commands for every owned ship
 		for (auto shipPair: state.ships) {
 			ShipStatePtr &ship = shipPair.second;
@@ -49,7 +50,7 @@ void Game::run()
 				}*/
 				const ShipStatePtr &enemy = state.getClosestTarget(ship->position);
 				int distToEnemy = ship->position.chebyshevDist(enemy->nextTickPos());
-				if (distToEnemy <= 40 && ship->heating < ship->maxHeating / 2) {
+				if (distToEnemy <= 40 && ship->heating < ship->maxHeating / 2 && ship->fuel > 40) {
 					commands.push_back(new Shoot(ship->id, enemy->nextTickPos(), 40));
 				}
 				/*if (ship->role == ShipState::Attacker && distToEnemy <= 8 && 
@@ -57,8 +58,27 @@ void Game::run()
 					commands.push_back(new Detonate(ship->id));
 				}*/
 				if (ship->role == ShipState::Defender && ship->cloneCounter > 1 && 
-					ship->fuel > 100 && i % 6 == 0) {
-					commands.push_back(new Duplicate(ship->id, 15, 0, 0, 1));
+					i > 0 && thrust == Vector2(0, 0)) {
+					int fuel = ship->fuel;
+					for (int j = 0; j < ship->cloneCounter; j++) {
+						if (fuel > 100) {
+							int childFuel = 15;
+							commands.push_back(new Duplicate(ship->id, childFuel, 0, 0, 1));
+							fuel -= childFuel;
+						}
+					}
+				}
+				
+				if (!clonesAccelerated) {
+					int j = 0;
+					for (auto otherPair: state.ships) {
+						ShipStatePtr &otherShip = otherPair.second;
+						if (otherShip->role == ship->role && otherShip != ship && 
+							otherShip->position == ship->position) {
+							commands.push_back(new Accelerate(otherShip->id, Vector2::allDirections[j++]));
+						}
+					}
+					clonesAccelerated = true;
 				}
 			}
 		}
