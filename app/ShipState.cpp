@@ -61,7 +61,8 @@ Vector2 ShipState::getThrustToKeepOrbit(int lesserRadius, int greaterRadius) con
 		gravNormal = oppositeGravNormal;
 	}
 
-	const Vector2 forceToChangeDir = gravNormal;
+	const bool velocityLimited = velocity.chebyshevDist({0, 0}) >= 8;
+	const Vector2 forceToChangeDir = velocityLimited? Vector2(0, 0) : gravNormal;
 
 	const Vector2 force = forceToIncreaseRadius + forceToChangeDir;
 	return force.capped() * -1;
