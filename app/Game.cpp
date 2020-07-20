@@ -40,17 +40,17 @@ void Game::run()
 		for (auto shipPair: state.ships) {
 			ShipStatePtr &ship = shipPair.second;
 			if (ship->role == state.role) {
-				Vector2 thrust = ship->getThrustToHover();
-				//Vector2 thrust = ship->getThrustToKeepOrbit(32, 48);
+				//Vector2 thrust = ship->getThrustToHover();
+				Vector2 thrust = ship->getThrustToKeepOrbit(32, 48);
 				commands.push_back(new Accelerate(ship->id, thrust));
 				/*if (i == 6) {
 					commands.push_back(
 						new Duplicate(ship->id, ship->fuel/2, ship->horizCounter / 2, ship->health / 2));
 				}*/
 				const ShipStatePtr &enemy = state.getClosestTarget(ship->position);
-				int distToEnemy = ship->position.chebyshevDist(enemy->position);
+				int distToEnemy = ship->position.chebyshevDist(enemy->nextTickPos());
 				if (distToEnemy <= 36) {
-					commands.push_back(new Shoot(ship->id, enemy->position, 4));
+					commands.push_back(new Shoot(ship->id, enemy->nextTickPos(), 5));
 				}
 				/*if (ship->role == ShipState::Attacker && distToEnemy <= 8 && 
 					state.getEnemyNum() == 1 && enemy->heating == enemy->maxHeating) {
@@ -58,8 +58,6 @@ void Game::run()
 				}*/
 			}
 		}
-		//shoot->setTarget(Vector2(0,0)); //TODO
-		//shoot->setWeapon(5);
 		const std::string &response = sendCommands(commands);
 		state = GameState(ConsTree(response));
 	}
@@ -181,10 +179,12 @@ std::string Game::start() const
 	//98 0 5 1 - overheat of thrust usage (+3/turn), when no fuel - start cool down, cannot shoot
 	//98 5 5 1 (+3/turn)
 	//98 10 10 1 - no overheat
-	//73 70 11 1
+	//73 70 11 1 - Lobsters: fail to start!
+	//256 20 13 1 - fail to start
+	//98 20 10 1 - shoot cmd with non zero arguments (shoot 40)! no overheat
 	
-	//int fuel = 256, x1 = 5, x2 = 13, clonesCount = 1;
-	int fuel = 73, x1 = 70, x2 = 11, clonesCount = 1;
+	int fuel = 98, x1 = 30, x2 = 10, clonesCount = 1;
+	//int fuel = 73, x1 = 70, x2 = 11, clonesCount = 1;
 	undefVars.push_back(fuel);
 	undefVars.push_back(x1);
 	undefVars.push_back(x2);
@@ -210,7 +210,7 @@ std::string Game::sendRequest(const std::string &req) const
 	if (m_offlineMode) {
 		static int calls = 0;
 		calls++;
-		return "11011000011101100001111101111000010000000011010111101111000100000000011011000011101110010000000011110111000010000110111010000000001111011110000100000000110111000010000110110100011011000010000111101011110111000010000110111010000000001111111101100001110101111011100011000010110000100101111010010111101111000010000000011011100001000011011010001101100001001101011011100100000011011000010011000011111101011011000011111101100011000001110000100101111010010111101110111111101101100011110110001111011000010011010110111001000000110110000100110000000000";
+		return "110110000111011000011111011110000100000000110101111011110001000000000110110000111011100100000000111101110000100001101110100000000011110111100001010100101101011011010011101100001000011110110011111110111000010000110111010000000001111111101100001110101111011100001101010110000110111111011000010110011011110111100001010100011101011011010011101100001001101011011100100000011011000010011000011111101011011000011111101100001001101110001100001111010010111101110110100001101100101110110110111011000010011011100100000011011100100000011011000010011111101011110101010000100111101100010111110110000100110111000110000110110010111011011111101100100000000000000";
 	}
 	else {
 		const std::shared_ptr<httplib::Response> serverResponse = 

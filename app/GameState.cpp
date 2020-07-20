@@ -28,11 +28,11 @@ GameState::GameState(const ConsTree &response)
 	}
 }
 
-const ShipStatePtr &GameState::getClosestTarget(Vector2 &curCoord) const
+ShipStatePtr GameState::getClosestTarget(Vector2 &curCoord) const
 {
 	bool found = false;
 	int curDist = -1;
-	const ShipStatePtr *res;
+	ShipStatePtr res;
 	for (auto shipPair: ships) {
 		ShipStatePtr &ship = shipPair.second;
 		if (ship->role != role) {
@@ -40,11 +40,11 @@ const ShipStatePtr &GameState::getClosestTarget(Vector2 &curCoord) const
 			if (!found || curCoord.manhDist(nextPos) < curDist) {
 				found = true;
 				curDist = curCoord.manhDist(nextPos);
-				res = &ship;
+				res = ship;
 			}
 		}
 	}
-	return *res;
+	return res;
 }
 
 int GameState::getEnemyNum() const

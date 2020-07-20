@@ -17,7 +17,7 @@ public:
 	};
 
 	GameState(const ConsTree &response);
-	const ShipStatePtr &getClosestTarget(Vector2 &curCoord) const;
+	ShipStatePtr getClosestTarget(Vector2 &curCoord) const;
 	int getEnemyNum() const;
 	int getMyShipId() const;
 	const ShipStatePtr &getMyShip() const;
