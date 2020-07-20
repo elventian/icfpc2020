@@ -181,8 +181,9 @@ std::string Game::start() const
 	//98 10 10 1 - no overheat
 	//73 70 11 1 - Lobsters: fail to start!
 	//256 20 13 1 - fail to start
+	//98 20 10 1
 	
-	int fuel = 98, x1 = 20, x2 = 10, clonesCount = 1;
+	int fuel = 98, x1 = 15, x2 = 10, clonesCount = 1;
 	//int fuel = 73, x1 = 70, x2 = 11, clonesCount = 1;
 	undefVars.push_back(fuel);
 	undefVars.push_back(x1);
