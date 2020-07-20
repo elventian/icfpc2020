@@ -40,19 +40,20 @@ void Game::run()
 		for (auto shipPair: state.ships) {
 			ShipStatePtr &ship = shipPair.second;
 			if (ship->role == state.role) {
-				//Vector2 thrust = ship->getThrustToHover();
-				Vector2 thrust = ship->getThrustToKeepOrbit(32, 48);
+				Vector2 thrust = ship->getThrustToHover();
+				//Vector2 thrust = ship->getThrustToKeepOrbit(32, 48);
 				commands.push_back(new Accelerate(ship->id, thrust));
 				/*if (i == 6) {
 					commands.push_back(
 						new Duplicate(ship->id, ship->fuel/2, ship->horizCounter / 2, ship->health / 2));
 				}*/
-				Vector2 enemyPos = state.getClosestTarget(ship->position);
-				int distToEnemy = ship->position.chebyshevDist(enemyPos);
+				const ShipStatePtr &enemy = state.getClosestTarget(ship->position);
+				int distToEnemy = ship->position.chebyshevDist(enemy->position);
 				if (distToEnemy <= 36) {
-					commands.push_back(new Shoot(ship->id, enemyPos, 4));
+					commands.push_back(new Shoot(ship->id, enemy->position, 4));
 				}
-				/*if (ship->role == ShipState::Attacker && distToEnemy <= 8 && state.getEnemyNum() == 1) {
+				/*if (ship->role == ShipState::Attacker && distToEnemy <= 8 && 
+					state.getEnemyNum() == 1 && enemy->heating == enemy->maxHeating) {
 					commands.push_back(new Detonate(ship->id));
 				}*/
 			}
@@ -180,8 +181,10 @@ std::string Game::start() const
 	//98 0 5 1 - overheat of thrust usage (+3/turn), when no fuel - start cool down, cannot shoot
 	//98 5 5 1 (+3/turn)
 	//98 10 10 1 - no overheat
+	//73 70 11 1
 	
-	int fuel = 256, x1 = 5, x2 = 13, clonesCount = 1;
+	//int fuel = 256, x1 = 5, x2 = 13, clonesCount = 1;
+	int fuel = 73, x1 = 70, x2 = 11, clonesCount = 1;
 	undefVars.push_back(fuel);
 	undefVars.push_back(x1);
 	undefVars.push_back(x2);
