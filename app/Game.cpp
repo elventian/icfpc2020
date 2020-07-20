@@ -156,29 +156,6 @@ std::string Game::join() const
 	//state->update();
 }
 
-int startParams[20][4] = {
-	{254, 3, 3, 1},
-	{254, 3, 3, 1},
-	{254, 3, 5, 1},
-	{254, 3, 10, 1},
-	{254, 3, 15, 1},
-	{254, 3, 20, 1},
-	{100, 3, 22, 1},
-	{100, 3, 32, 1},
-	{100, 1, 3, 1},
-	{100, 2, 3, 1},
-	{100, 3, 3, 1},
-	{100, 4, 3, 1},
-	{100, 5, 3, 1},
-	{100, 6, 3, 1},
-	{100, 10, 3, 1},
-	{100, 15, 3, 1},
-	{100, 20, 3, 1},
-	{100, 25, 3, 1},
-	{100, 30, 3, 1},
-	{100, 40, 3, 1},
-};
-
 std::string Game::start() const
 {
 	//(3, playerKey, (x0, x1, x2, x3))
@@ -186,29 +163,11 @@ std::string Game::start() const
 	list.push_back(3);
 	list.push_back(std::stol(m_playerKey));
 	std::list<int64_t> undefVars;
-	//int x0 = 254, x1 = 3, x2 = 3, x3 = 1;
+	//int x0 = 254, x1 = 3, x2 = 3, x3 = 1; - overheat of thrust usage. when reach maximum - drastically increases
 	//int x0 = 270, x1 = 30, x2 = 10, x3 = 1; //fail to start
-	std::string line;
-	int calls = 0;
-	std::ifstream readf("calls.txt");
-	if (readf.is_open()) {
-		if (std::getline(readf,line)) {
-			std::string::size_type sz;		
-			calls = std::stoi(line, &sz);
-		}
-		readf.close();
-	}
+	//98,70,11,1
 	
-	calls++;
-	if (calls > 20) { calls = 0; }
-	std::ofstream writef("calls.txt");
-	if (writef.is_open())
-	{
-		writef << calls << "\n";
-		writef.close();
-	}
-	
-	int fuel = startParams[calls][0], x1 = startParams[calls][1], x2 = startParams[calls][2], clonesCount = startParams[calls][3];
+	int fuel = 98, x1 = 70, x2 = 11, clonesCount = 1;
 	//256, 5, 13, 1 
 	undefVars.push_back(fuel);
 	undefVars.push_back(x1);
