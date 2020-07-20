@@ -28,13 +28,12 @@ GameState::GameState(const ConsTree &response)
 	}
 }
 
-Vector2 GameState::getVectorToHover() const
+Vector2 GameState::getVectorToHover(Vector2 &curCoord) const
 {
-	Vector2 mycoord = getMyShip()->position;
-	Vector2 normalized = mycoord;
+	Vector2 normalized = curCoord;
 	normalized.normalize();
 	Vector2 thrust = normalized * Vector2(-1, -1);
-	if (abs(mycoord.x()) > abs(mycoord.y())) { return Vector2(thrust.x(), 0); }
+	if (abs(curCoord.x()) > abs(curCoord.y())) { return Vector2(thrust.x(), 0); }
 	return Vector2(0, thrust.y());
 }
 

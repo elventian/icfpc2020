@@ -13,6 +13,13 @@ std::string CommandList::toLinear() const
 	return res;
 }
 
+CommandList::~CommandList()
+{
+	for (Command *cmd: *this) {
+		delete cmd;
+	}
+}
+
 std::string Accelerate::toLinear() const
 {
 	//(0, shipId, vector)
@@ -44,7 +51,7 @@ std::string Shoot::toLinear() const
 
 std::string Duplicate::toLinear() const
 {
-	//(3, shipId, x1)
+	//(3, shipId, (x0, x1, x2, cloneCount))
 	std::list<int64_t> list;
 	list.push_back(3);
 	list.push_back(m_shipId);

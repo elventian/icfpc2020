@@ -31,8 +31,6 @@ private:
 	const std::string m_postUrl;
 	const std::string m_playerKey;
 	const int maxTurns = 256;
-	Accelerate *accelerate;
-	Shoot *shoot;
 	
 	std::string join() const;
 	std::string start() const;

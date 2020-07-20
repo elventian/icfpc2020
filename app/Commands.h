@@ -9,6 +9,7 @@ class Command
 {
 public:
 	virtual std::string toLinear() const = 0;
+	virtual ~Command() {}
 };
 
 class Accelerate: public Command
@@ -62,6 +63,7 @@ class CommandList: public std::list<Command *>
 {
 public:
 	std::string toLinear() const;
+	~CommandList();
 };
 
 

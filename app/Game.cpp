@@ -33,19 +33,21 @@ void Game::run()
 	ConsTree startTree = ConsTree(startResponse);
 	std::cout << startTree.root()->printable() << std::endl;
 	GameState state = GameState(startTree);
-	accelerate = new Accelerate(state.getMyShipId());
-	shoot = new Shoot(state.getMyShipId());
-	Duplicate *duplicate = new Duplicate(state.getMyShipId());
 	for (int i = 0; i < maxTurns; i++) {
 		CommandList commands;
-		Vector2 thrust = state.getVectorToHover();
-		accelerate->setCoord(thrust);
-		if (i == 6) {
-			commands.push_back(duplicate);
+		//set commands for every owned ship
+		for (auto shipPair: state.ships) {
+			ShipStatePtr &ship = shipPair.second;
+			if (ship->role == state.role) {
+				Vector2 thrust = state.getVectorToHover(ship->position); //TODO call ship method
+				commands.push_back(new Accelerate(ship->id, thrust));
+				if (i == 6) {
+					commands.push_back(new Duplicate(ship->id));
+				}
+			}
 		}
 		//shoot->setTarget(Vector2(0,0)); //TODO
 		//shoot->setWeapon(5);
-		commands.push_back(accelerate);
 		const std::string &response = sendCommands(commands);
 		state = GameState(ConsTree(response));
 	}
