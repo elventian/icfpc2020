@@ -25,23 +25,24 @@ send url msg = do
     return $ fst$demodulate strResp
 
 
-findShId r (BPart "cons_2" [h,t]) = if role==r then (shid, pos, vel, x5) else findShId r t 
+findShId r (BPart "cons_2" [h,t]) = if role==r then (shid, pos, vel, fuel, x5) else findShId r t 
     where role = evalBlock' $BApp (BName "car") $ BApp (BName "car") h
           shid = evalBlock' $BApp (BName "car") $ BApp (BName "cdr") $ BApp (BName "car") h
           pos = evalBlock' $BApp (BName "car") $ BApp (BName "cdr") $ BApp (BName "cdr") $ BApp (BName "car") h
           vel = evalBlock' $BApp (BName "car") $ BApp (BName "cdr") $ BApp (BName "cdr") $ BApp (BName "cdr") $ BApp (BName "car") h
           x5 = evalBlock' $BApp (BName "car") $ BApp (BName "cdr") $ BApp (BName "cdr") $ BApp (BName "cdr") $ BApp (BName "cdr") $ BApp (BName "cdr") $ BApp (BName "car") h
+          fuel = evalBlock' $ BApp (BName "car") $ BApp (BName "car") $ BApp (BName "cdr") $ BApp (BName "cdr") $ BApp (BName "cdr") $ BApp (BName "cdr") $ BApp (BName "car") h
 findShId r s = error $ show s
 
 loop r url key  = do
     let stage = evalBlock' $ BApp (BName "car") $ BApp (BName "cdr") r
     let role = evalBlock' $ BApp (BName "car") $ BApp (BName "cdr") $BApp (BName "car") $ BApp (BName "cdr") $ BApp (BName "cdr") r
     let shipsnadcommands = evalBlock' $ BApp (BName "car") $ BApp (BName "cdr") $ BApp (BName "cdr") $BApp (BName "car") $ BApp (BName "cdr") $ BApp (BName "cdr") $ BApp (BName "cdr") r
-    let (shid, pos, vel, BNum x5) = findShId role shipsnadcommands
+    let (shid, pos, vel, fuel, BNum x5) = findShId role shipsnadcommands
     let (BPart "cons_2" [BNum x, BNum y]) = pos
     let (BPart "cons_2" [BNum vx, BNum vy]) = vel
     let (BNum rv) = role
-    let (eid, epos, evel, _) = findShId (BNum (1-rv)) shipsnadcommands
+    let (eid, epos, evel,BNum efuel,  _) = findShId (BNum (1-rv)) shipsnadcommands
     let (BPart "cons_2" [BNum ex, BNum ey]) = epos
     let (BPart "cons_2" [BNum evx, BNum evy]) = evel
     let (ax, ay) = (-127 * signum ex, -127 * signum ey)
@@ -52,7 +53,7 @@ loop r url key  = do
     let dCmd = BList [BNum 1, shid]
     if stage == BNum 2
     then return ()
-    else do let BMod mes = evalBlock' $  BApp (BName "mod") $ if (ex-x)*(ex-x) + (ey-y)*(ey-y) < 5*5  then BList [BNum 4, BNum key, BList[dCmd]] else BList [BNum 4, BNum key, BList[mCmd]]--if (ex-x)*(ex-x) + (ey-y)*(ey-y) < 50*50 && x5 == 0 then BList [BNum 4, BNum key, BList[mCmd, sCmd]] else BList [BNum 4, BNum key, BList[mCmd]]
+    else do let BMod mes = evalBlock' $  BApp (BName "mod") $ if (ex-x)*(ex-x) + (ey-y)*(ey-y) < 5*5 && efuel < 200 then BList [BNum 4, BNum key, BList[dCmd]] else BList [BNum 4, BNum key, BList[mCmd]]--if (ex-x)*(ex-x) + (ey-y)*(ey-y) < 50*50 && x5 == 0 then BList [BNum 4, BNum key, BList[mCmd, sCmd]] else BList [BNum 4, BNum key, BList[mCmd]]
             r1 <- send url mes
             loop r1 url key
 
