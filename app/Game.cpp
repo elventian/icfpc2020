@@ -167,10 +167,10 @@ std::string Game::start() const
 	//int x0 = 270, x1 = 30, x2 = 10, x3 = 1; //fail to start
 	//98,70,11,1
 	//98, 3, 22, 1 -//fail to start
-	//270, 10, 3, 1 -//fail to start
-	
-	int fuel = 270, x1 = 10, x2 = 3, clonesCount = 1;
+	//270, 10, 3, 1
 	//256, 5, 13, 1 
+	
+	int fuel = 256, x1 = 5, x2 = 13, clonesCount = 1;
 	undefVars.push_back(fuel);
 	undefVars.push_back(x1);
 	undefVars.push_back(x2);
