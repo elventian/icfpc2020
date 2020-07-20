@@ -40,7 +40,8 @@ void Game::run()
 		for (auto shipPair: state.ships) {
 			ShipStatePtr &ship = shipPair.second;
 			if (ship->role == state.role) {
-				Vector2 thrust = ship->getThrustToKeepOrbit(48);
+				Vector2 thrust = ship->getThrustToHover();
+				//Vector2 thrust = ship->getThrustToKeepOrbit(48);
 				commands.push_back(new Accelerate(ship->id, thrust));
 				/*if (i == 6) {
 					commands.push_back(
@@ -48,8 +49,8 @@ void Game::run()
 				}*/
 				Vector2 enemyPos = state.getClosestTarget(ship->position);
 				int distToEnemy = ship->position.chebyshevDist(enemyPos);
-				if (distToEnemy <= 24) {
-					commands.push_back(new Shoot(ship->id, enemyPos, 5));
+				if (distToEnemy <= 36) {
+					commands.push_back(new Shoot(ship->id, enemyPos, 1));
 				}
 				/*if (ship->role == ShipState::Attacker && distToEnemy <= 8 && state.getEnemyNum() == 1) {
 					commands.push_back(new Detonate(ship->id));
