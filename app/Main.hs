@@ -49,9 +49,10 @@ loop r url key  = do
                then BList[BNum 0, shid, (BPart "cons_2" [BNum (if abs x > abs y then (-x `div` (abs x)) else 0),BNum (if abs y > abs x then (-y `div` (abs y)) else 0)])]
                else BList[BNum 0, shid, (BPart "cons_2" [BNum (if signum  (x - ax) == -1 * signum vx && abs vx > 6 then 0 else signum $ x - ax),BNum (if signum (y - ay) == -1 * signum vy && abs vy > 6 then 0 else signum $ y - ay)])]
     let sCmd = BList [BNum 2, shid, BPart "cons_2" [BNum (ex+evx), BNum (ey+evy)] , BNum 64]
+    let dCmd = BList [BNum 1, shid]
     if stage == BNum 2
     then return ()
-    else do let BMod mes = evalBlock' $  BApp (BName "mod") $ if (ex-x)*(ex-x) + (ey-y)*(ey-y) < 50*50 && x5 == 0 then BList [BNum 4, BNum key, BList[mCmd, sCmd]] else BList [BNum 4, BNum key, BList[mCmd]]
+    else do let BMod mes = evalBlock' $  BApp (BName "mod") $ if (ex-x)*(ex-x) + (ey-y)*(ey-y) < 5*5  then BList [BNum 4, BNum key, BList[dCmd]] else BList [BNum 4, BNum key, BList[mCmd]]--if (ex-x)*(ex-x) + (ey-y)*(ey-y) < 50*50 && x5 == 0 then BList [BNum 4, BNum key, BList[mCmd, sCmd]] else BList [BNum 4, BNum key, BList[mCmd]]
             r1 <- send url mes
             loop r1 url key
 
@@ -63,7 +64,7 @@ main = catch (
         --r <- send (args!!0) (args!!1)
         r <- send (args!!0 ++ "/aliens/send") mes
         let role = evalBlock' $ BApp (BName "car") $ BApp (BName "cdr") $BApp (BName "car") $ BApp (BName "cdr") $ BApp (BName "cdr") r
-        let BMod mes1 = if (role == BNum 1)
+        let BMod mes1 = if True --(role == BNum 1)
                         then evalBlock' $  BApp (BName "mod") $ BList [BNum 3, BNum (read$args!!1), BList[BNum 326, BNum 0, BNum 10, BNum 1]]
                         else evalBlock' $  BApp (BName "mod") $ BList [BNum 3, BNum (read$args!!1), BList[BNum 134, BNum 64, BNum 10, BNum 1]]
         r <- send (args!!0 ++ "/aliens/send") mes1
