@@ -13,6 +13,8 @@ public:
 	Vector2(const DiscrCoord2 &coord): DiscrCoord2(coord) {}
 	Vector2(int64_t x, int64_t y): DiscrCoord2(x, y) {}
 	Vector2(const ConsList *list);
+
+	Vector2 getGravity() const;
 };
 
 #endif // VECTOR2_H

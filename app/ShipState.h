@@ -17,6 +17,9 @@ public:
 
 	ShipState(const ConsList *shipList);
 
+	Vector2 nextTickPos() const; // If no thrust expected.
+	Vector2 getThrustToHover() const { return position.getGravity(); }
+
 	Role role;
 	int id;
 	Vector2 position;

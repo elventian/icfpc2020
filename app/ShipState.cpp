@@ -25,3 +25,9 @@ ShipState::ShipState(const ConsList *shipList)
 	maxHeating = list[6]->intVal();
 	clonesCount = list[7]->intVal();
 }
+
+Vector2 ShipState::nextTickPos() const
+{
+	Vector2 newVelocity = velocity + position.getGravity();
+	return position + newVelocity;
+}
