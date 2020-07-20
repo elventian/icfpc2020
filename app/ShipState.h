@@ -27,7 +27,7 @@ public:
 	int tunnelCounter; // unknown
 	int heating;
 	int maxHeating;
-	int x7; // Unknown, seems to be always 1.
+	int clonesCount; // Unknown, seems to be always 1.
 };
 
 typedef std::shared_ptr<ShipState> ShipStatePtr;

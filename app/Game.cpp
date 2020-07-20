@@ -35,10 +35,14 @@ void Game::run()
 	GameState state = GameState(startTree);
 	accelerate = new Accelerate(state.getMyShipId());
 	shoot = new Shoot(state.getMyShipId());
+	Duplicate *duplicate = new Duplicate(state.getMyShipId());
 	for (int i = 0; i < maxTurns; i++) {
 		CommandList commands;
 		Vector2 thrust = state.getVectorToHover();
 		accelerate->setCoord(thrust);
+		if (i == 6) {
+			commands.push_back(duplicate);
+		}
 		//shoot->setTarget(Vector2(0,0)); //TODO
 		//shoot->setWeapon(5);
 		commands.push_back(accelerate);
@@ -153,12 +157,12 @@ std::string Game::start() const
 	std::list<int64_t> undefVars;
 	//int x0 = 254, x1 = 3, x2 = 3, x3 = 1;
 	//int x0 = 270, x1 = 30, x2 = 10, x3 = 1; //fail to start
-	int x0 = 254, x1 = 3, x2 = 3, x3 = 1;
+	int x0 = 254, x1 = 3, x2 = 3, clonesCount = 2;
 	//256, 5, 13, 1 
 	undefVars.push_back(x0);
 	undefVars.push_back(x1);
 	undefVars.push_back(x2);
-	undefVars.push_back(x3);
+	undefVars.push_back(clonesCount);
 	const std::string &cmd = listToLinear(list, listToLinear(undefVars));
 	return sendRequest(cmd);
 }

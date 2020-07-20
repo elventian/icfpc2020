@@ -48,14 +48,13 @@ private:
 	int m_x3;
 };
 
-class UnknownCommand: public Command
+class Duplicate: public Command
 {
 public:
-	UnknownCommand(int shipId, int x1): m_shipId(shipId), m_x1(x1){}
+	Duplicate(int shipId): m_shipId(shipId) {}
 	std::string toLinear() const override;
 private:
 	int m_shipId;
-	int m_x1;
 };
 
 
