@@ -43,39 +43,25 @@ void Game::run()
 		for (auto shipPair: state.ships) {
 			ShipStatePtr &ship = shipPair.second;
 			if (ship->role == state.role) {
-				ShipStatePtr swarmQueen;
-				ShipStatePtr enemy = state.getClosestTarget(ship->position);
-				
+				const ShipStatePtr &enemy = state.getClosestTarget(ship->position);
 				int distToEnemy = ship->position.chebyshevDist(enemy->nextTickPos());
-				if (distToEnemy <= 40 && ship->heating < ship->maxHeating / 2 && ship->fuel > 40 && 
-					ship->horizCounter) {
+				if (distToEnemy <= 40 && ship->heating < ship->maxHeating / 2 && ship->fuel > 40) {
 					commands.push_back(new Shoot(ship->id, enemy->nextTickPos(), 40));
 				}
-				//Vector2 thrust = ship->getThrustToHover();
 				Vector2 thrust = (ship->role == ShipState::Defender) ? 
 					ship->getThrustToKeepOrbit(24, 56) :
 					ship->getThrustToKeepOrbitOrApproach(24, 56, *enemy.get());
 				commands.push_back(new Accelerate(ship->id, thrust));
-				
-				if (ship->role == ShipState::Attacker && state.checkSwarm(swarmQueen) > 4) {
-					if (ship->cloneCounter > 1 && ship->fuel > 60) {
-						commands.push_back(new Duplicate(ship->id, 15, 0, 0, 1));
-					}
-				}
-				
-				if (ship->fuel < 15 && ship->horizCounter == 0 && state.getEnemyNumNear(ship->position, 10) > 0) {
-					commands.push_back(new Detonate(ship->id));
-				}
 				/*if (ship->role == ShipState::Attacker && distToEnemy <= 8 && 
 					state.getEnemyNum() == 1 && enemy->heating == enemy->maxHeating) {
 					commands.push_back(new Detonate(ship->id));
 				}*/
 				if (ship->role == ShipState::Defender && ship->cloneCounter > 1 && 
-					i > 0 && thrust == Vector2(0, 0) && ship->velocity.chebyshevDist({0,0}) >= 6) {
+					i > 0 && thrust == Vector2(0, 0) && ship->velocity.chebyshevDist({0,0}) >= 5) {
 					int fuel = ship->fuel;
 					for (int j = 0; j < ship->cloneCounter; j++) {
 						if (fuel > 100) {
-							int childFuel = 15;
+							int childFuel = 17;
 							commands.push_back(new Duplicate(ship->id, childFuel, 0, 0, 1));
 							fuel -= childFuel;
 						}
