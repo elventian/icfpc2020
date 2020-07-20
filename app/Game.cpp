@@ -210,7 +210,7 @@ std::string Game::start() const
 	//150 40 10 1
 	//175 40 10 1 - fail to start
 	
-	int fuel = 167, x1 = 40, x2 = 10, clonesCount = 5;
+	int fuel = 160, x1 = 40, x2 = 10, clonesCount = 5;
 	//int fuel = 73, x1 = 70, x2 = 11, clonesCount = 1;
 	undefVars.push_back(fuel);
 	undefVars.push_back(x1);
