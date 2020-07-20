@@ -208,8 +208,9 @@ std::string Game::start() const
 	//98 20 10 1 - shoot cmd with non zero arguments (shoot 40)! no overheat
 	//98 30 10 1 = 98 20 10 1, if shoot 5 (not 40) - zero args in shoot
 	//150 40 10 1
+	//175 40 10 1 - fail to start
 	
-	int fuel = 175, x1 = 40, x2 = 10, clonesCount = 5;
+	int fuel = 167, x1 = 40, x2 = 10, clonesCount = 5;
 	//int fuel = 73, x1 = 70, x2 = 11, clonesCount = 1;
 	undefVars.push_back(fuel);
 	undefVars.push_back(x1);
