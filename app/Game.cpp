@@ -50,7 +50,7 @@ void Game::run()
 				const ShipStatePtr &enemy = state.getClosestTarget(ship->position);
 				int distToEnemy = ship->position.chebyshevDist(enemy->position);
 				if (distToEnemy <= 36) {
-					commands.push_back(new Shoot(ship->id, enemy->position, 4));
+					commands.push_back(new Shoot(ship->id, enemy->position, 40));
 				}
 				/*if (ship->role == ShipState::Attacker && distToEnemy <= 8 && 
 					state.getEnemyNum() == 1 && enemy->heating == enemy->maxHeating) {
@@ -180,8 +180,9 @@ std::string Game::start() const
 	//98 5 5 1 (+3/turn)
 	//98 10 10 1 - no overheat
 	//73 70 11 1 - Lobsters: fail to start!
+	//256 20 13 1 - fail to start
 	
-	int fuel = 256, x1 = 20, x2 = 13, clonesCount = 1;
+	int fuel = 98, x1 = 20, x2 = 10, clonesCount = 1;
 	//int fuel = 73, x1 = 70, x2 = 11, clonesCount = 1;
 	undefVars.push_back(fuel);
 	undefVars.push_back(x1);
