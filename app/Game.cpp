@@ -50,12 +50,12 @@ void Game::run()
 				const ShipStatePtr &enemy = state.getClosestTarget(ship->position);
 				int distToEnemy = ship->position.chebyshevDist(enemy->position);
 				if (distToEnemy <= 36) {
-					commands.push_back(new Shoot(ship->id, enemy->position, 4));
+					commands.push_back(new Shoot(ship->id, enemy->position, 42));
 				}
-				if (ship->role == ShipState::Attacker && distToEnemy <= 8 && 
+				/*if (ship->role == ShipState::Attacker && distToEnemy <= 8 && 
 					state.getEnemyNum() == 1 && enemy->heating == enemy->maxHeating) {
 					commands.push_back(new Detonate(ship->id));
-				}
+				}*/
 			}
 		}
 		//shoot->setTarget(Vector2(0,0)); //TODO
