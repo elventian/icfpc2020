@@ -47,11 +47,10 @@ loop r url key  = do
     let mCmd = if (abs x >= 127 || abs y >= 127) && signum x == signum ax && signum y == signum ay ||rv==0
                then BList[BNum 0, shid, (BPart "cons_2" [BNum (if abs x > abs y then (-x `div` (abs x)) else 0),BNum (if abs y > abs x then (-y `div` (abs y)) else 0)])]
                else BList[BNum 0, shid, (BPart "cons_2" [BNum (if signum  (x - ax) == -1 * signum vx && abs vx > 6 then 0 else signum $ x - ax),BNum (if signum (y - ay) == -1 * signum vy && abs vy > 6 then 0 else signum $ y - ay)])]
+    let sCmd = BList [BNum 2, shid, BPart "cons_2" [BNum (ex+evx), BNum (ey+evy)] , BNum 64]
     if stage == BNum 2
     then return ()
-    else do let BMod mes = evalBlock' $  BApp (BName "mod") $ BList [BNum 4, BNum key, BList[mCmd
-                                                                                             {-,BList [BNum 2, shid, BPart "cons_2" [BNum (ex+evx), BNum (ey+evy)] , BNum 30]-}
-                                                                                            ]]
+    else do let BMod mes = evalBlock' $  BApp (BName "mod") $ if (ex-x)*(ex-x) + (ey-y)*(ey-y) < 70*70 then BList [BNum 4, BNum key, BList[mCmd, sCmd]] else BList [BNum 4, BNum key, BList[mCmd]]
             r1 <- send url mes
             loop r1 url key
 
