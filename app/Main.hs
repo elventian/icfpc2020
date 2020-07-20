@@ -43,7 +43,7 @@ loop r url key  = do
     let (BPart "cons_2" [BNum ex, BNum ey]) = epos
     let (BPart "cons_2" [BNum evx, BNum evy]) = evel
     let (ax, ay) = (-127 * signum ex, -127 * signum ey)
-    let mCmd = if abs ax == 127 || abs ay == 127 ||rv==0
+    let mCmd = if abs x == 127 || abs y == 127 ||rv==0
                then BList[BNum 0, shid, (BPart "cons_2" [BNum (if abs x > abs y then (-x `div` (abs x)) else 0),BNum (if abs y > abs x then (-y `div` (abs y)) else 0)])]
                else BList[BNum 0, shid, (BPart "cons_2" [BNum (signum $ x - ax),BNum (signum $ y - ay)])]
     if stage == BNum 2
