@@ -43,18 +43,21 @@ void Game::run()
 		for (auto shipPair: state.ships) {
 			ShipStatePtr &ship = shipPair.second;
 			if (ship->role == state.role) {
-				//Vector2 thrust = ship->getThrustToHover();
-				Vector2 thrust = ship->getThrustToKeepOrbit(24, 56);
-				commands.push_back(new Accelerate(ship->id, thrust));
-				/*if (i == 6) {
-					commands.push_back(
-						new Duplicate(ship->id, ship->fuel/2, ship->horizCounter / 2, ship->health / 2));
-				}*/
 				const ShipStatePtr &enemy = state.getClosestTarget(ship->position);
 				int distToEnemy = ship->position.chebyshevDist(enemy->nextTickPos());
 				if (distToEnemy <= 40 && ship->heating < ship->maxHeating / 2 && ship->fuel > 40) {
 					commands.push_back(new Shoot(ship->id, enemy->nextTickPos(), 40));
 				}
+				//Vector2 thrust = ship->getThrustToHover();
+				Vector2 thrust = (ship->role == ShipState::Defender) ? 
+					ship->getThrustToKeepOrbit(24, 56) :
+					ship->getThrustToKeepOrbitOrApproach(24, 56, *enemy.get());
+				commands.push_back(new Accelerate(ship->id, thrust));
+				/*if (i == 6) {
+					commands.push_back(
+						new Duplicate(ship->id, ship->fuel/2, ship->horizCounter / 2, ship->health / 2));
+				}*/
+				
 				/*if (ship->role == ShipState::Attacker && distToEnemy <= 8 && 
 					state.getEnemyNum() == 1 && enemy->heating == enemy->maxHeating) {
 					commands.push_back(new Detonate(ship->id));
