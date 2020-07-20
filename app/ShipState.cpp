@@ -46,15 +46,14 @@ Vector2 ShipState::getThrustToKeepOrbit(int lesserRadius, int greaterRadius) con
 	const bool dangerousApproaching =
 		(velocity.dotProduct(position.getGravity()) > 0)
 		&& (Vector2(0, 0).squaredDistToLine(position, position + velocity) <=
-			planetRadius * planetRadius);
+			2 * planetRadius * planetRadius); // 2 is sqrt(2) squared.
 
 	if (!dangerousApproaching) {
 		const Vector2 prevPosition = position - velocity;
 		const bool approachingPlanet =
 			position.squaredDist({0, 0}) <= prevPosition.squaredDist({0, 0});
 		const int radius = approachingPlanet? greaterRadius : lesserRadius;
-		// 2 is sqrt(2) squared.
-		if (position.chebyshevDist({0, 0}) >= 2 * radius) { return Vector2(0, 0); }
+		if (position.chebyshevDist({0, 0}) >= radius) { return Vector2(0, 0); }
 	}
 
 	const Vector2 forceToIncreaseRadius = position.getGravity() * -1;
