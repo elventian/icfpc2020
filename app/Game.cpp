@@ -40,7 +40,7 @@ void Game::run()
 		for (auto shipPair: state.ships) {
 			ShipStatePtr &ship = shipPair.second;
 			if (ship->role == state.role) {
-				Vector2 thrust = ship->getThrustToHover();
+				Vector2 thrust = ship->getThrustToKeepOrbit(48);
 				commands.push_back(new Accelerate(ship->id, thrust));
 				/*if (i == 6) {
 					commands.push_back(
@@ -51,9 +51,9 @@ void Game::run()
 				if (distToEnemy <= 24) {
 					commands.push_back(new Shoot(ship->id, enemyPos, 5));
 				}
-				if (ship->role == ShipState::Attacker && distToEnemy <= 8 && state.getEnemyNum() == 1) {
+				/*if (ship->role == ShipState::Attacker && distToEnemy <= 8 && state.getEnemyNum() == 1) {
 					commands.push_back(new Detonate(ship->id));
-				}
+				}*/
 			}
 		}
 		//shoot->setTarget(Vector2(0,0)); //TODO
@@ -178,7 +178,7 @@ std::string Game::start() const
 	//134 64 10 1 - Unagi: fail to start!
 	//98 0 5 1 - overheat of thrust usage (+3/turn), when no fuel - start cool down, cannot shoot
 	//98 5 5 1 (+3/turn)
-	//98 10 10 1
+	//98 10 10 1 - no overheat
 	
 	int fuel = 256, x1 = 5, x2 = 13, clonesCount = 1;
 	undefVars.push_back(fuel);
